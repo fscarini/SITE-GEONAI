@@ -269,14 +269,33 @@ function initializeAnimations() {
     });
 
     // Parallax effect for hero section
-    window.addEventListener('scroll', () => {
-        const scrolled = window.pageYOffset;
-        const parallax = document.querySelector('.hero');
-        if (parallax) {
-            const speed = scrolled * 0.5;
-            parallax.style.transform = `translateY(${speed}px)`;
+    function updateHeroFade() {
+        const heroSection = document.querySelector('.hero');
+        const aboutSection = document.getElementById('about');
+
+        if (!heroSection || !aboutSection) {
+            return;
         }
-    });
+
+        const aboutTop = aboutSection.getBoundingClientRect().top;
+        const windowHeight = window.innerHeight;
+
+        // Define o ponto em que o fade deve começar. 
+        // Ex: 0.8 significa que o fade começa quando a seção 'about' está a 80% da altura da tela de distância.
+        const fadeStart = windowHeight * 0.8; 
+        
+        // Define a rapidez do fade. Um valor menor torna o fade mais rápido.
+        const fadeDuration = windowHeight * 0.6; 
+
+        if (aboutTop < fadeStart) {
+            // Calcula a opacidade. O valor diminui de 1 para 0 à medida que a seção 'about' sobe.
+            const opacity = Math.max(0, aboutTop / fadeDuration);
+            heroSection.style.opacity = opacity;
+        } else {
+            // Garante que a opacidade seja 1 se a rolagem estiver antes do ponto de início do fade.
+            heroSection.style.opacity = 1;
+        }
+    }
 
     // Typing effect for hero title (removed to fix HTML display issue)
     // const heroTitle = document.querySelector(".hero-title");
@@ -652,6 +671,7 @@ const optimizedScrollHandler = throttle(() => {
     updateScrollProgress();
     updateActiveNavigation();
     updateBackToTopVisibility();
+    updateHeroFade(); // Adicione esta linha
 }, 16); // ~60fps
 
 function updateScrollProgress() {

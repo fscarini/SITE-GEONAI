@@ -1,0 +1,19 @@
+/* ===== CUSTOM PROPERTIES ===== */
+:root {
+    --primary-color: #0A1128;
+    --secondary-color: #007bff;
+    --accent-color: #00d4ff;
+    --text-light: #ffffff;
+    --text-dark: #000000;
+    --text-gray: #cccccc;
+    --background-light: #f8f9fa;
+    --gradient-primary: linear-gradient(135deg, #007bff 0%, #00d4ff 100%);
+    --gradient-dark: linear-gradient(135deg, #0A1128 0%, #1a2332 100%);
+    --shadow-light: 0 4px 6px rgba(0, 0, 0, 0.1);
+    --shadow-medium: 0 8px 25px rgba(0, 0, 0, 0.15);
+    --shadow-heavy: 0 15px 35px rgba(0, 0, 0, 0.2);
+    --border-radius: 12px;
+    --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    --font-heading: 'Montserrat', sans-serif;
+    --font-body: 'Open Sans', sans-serif;
+}
