@@ -20,7 +20,7 @@
     <meta property="twitter:description" content="Especialistas em soluções de IA que automatizam processos, aumentam eficiência e impulsionam resultados.">
     
     <!-- Favicon -->
-    <link rel="icon" type="image/png" href="GEONAI-LOGO07.png">
+    <link rel="icon" type="image/png" href="./src/img/GEONAI-LOGO07.png">
     
     <!-- Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -33,7 +33,9 @@
     <!-- AOS (Animate On Scroll) Library -->
     <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
     
-    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="./src/css/styles.css">
+    <link rel="stylesheet" href="./src/css/reset.css">
+    <link rel="stylesheet" href="./src/css/variables.css">
 </head>
 <body>
     <!-- Loading Screen -->
@@ -46,15 +48,12 @@
         <p>Carregando...</p>
     </div>
 
-    <!-- Particles Background -->
-    <div id="particles-js"></div>
-
     <!-- Header -->
     <header class="header">
         <nav class="navbar">
             <div class="nav-container">
                 <div class="nav-logo">
-                    <img src="GEONAI-LOGO04.png" alt="Geon AI Logo" class="logo-img">
+                    <img src="./src/img/GEONAI-LOGO04.png" alt="Geon AI Logo" class="logo-img">
                 </div>
                 <ul class="nav-menu">
                     <li class="nav-item">
@@ -90,6 +89,8 @@
     <main>
         <!-- Hero Section -->
         <section id="home" class="hero">
+            <!-- Particles Background -->
+            <div id="particles-js"></div>
             <div class="hero-content">
                 <div class="hero-logo">
                     <!--<video src="GEONAI-Logo-Animada.mp4" class="spiral-logo" autoplay loop muted playsinline></video>-->
@@ -186,7 +187,7 @@
                             <div class="team-member" data-aos="zoom-in" data-aos-delay="100">
                                 <div class="member-photo">
                                     <div class="photo-placeholder">
-                                        <img src="foto-guilherme.jpg" alt="Foto guilherme">
+                                        <img src="./src/img/foto-guilherme.jpg" alt="Foto guilherme">
                                     </div>
                                 </div>
                                 <h4>Guilherme Quiller</h4>
@@ -808,7 +809,7 @@
     <!-- Scripts -->
     <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
     <script src="https://cdn.jsdelivr.net/particles.js/2.0.0/particles.min.js"></script>
-    <script src="script.js"></script>
+    <script src="./src/js/script.js"></script>
 </body>
 </html>
 
