@@ -289,7 +289,6 @@
     /* filter: drop-shadow(0 0 20px rgba(0, 123, 255, 0.5)); */ /* Comentado para remover a luz de fundo */
 }
 
-
 .hero-title {
     margin-bottom: 1.5rem;
     opacity: 0;
@@ -321,7 +320,7 @@
 
 .hero-scroll-indicator {
     position: absolute;
-    bottom: 0.7rem;
+    bottom: 2rem;
     left: 50%;
     transform: translateX(-50%);
     animation: scrollBounce 1.7s infinite;
@@ -361,7 +360,7 @@
 
 /* ===== ABOUT SECTION ===== */
 .about {
-    padding: 6rem 0;
+    padding: 3rem 0 6rem 0;
     background: var(--primary-color);
 }
 
@@ -1309,9 +1308,7 @@
         height: 40px;
         font-size: 1rem;
     }
-}
 
-@media (max-width: 785px) {
     .spiral-logo {
         width: 80px;
     }
@@ -1339,7 +1336,11 @@
         height: 40px;
         font-size: 1rem;
     }
+
+    .hero-scroll-indicator {
+    bottom: 0.7rem;
 }
+
 
 /* ===== ACCESSIBILITY ===== */
 @media (prefers-reduced-motion: reduce) {
