@@ -163,7 +163,6 @@
     left: 0;
     width: 100%;
     height: 100%;
-    z-index: 1;
 }
 
 /* ===== HEADER ===== */
@@ -199,7 +198,7 @@
 .nav-menu {
     display: flex;
     list-style: none;
-    gap: 2rem;
+    gap: 1rem;
     align-items: center;
 }
 
@@ -317,14 +316,15 @@
     flex-wrap: wrap;
     opacity: 0;
     animation: buttonsFadeIn 1s ease-out 1.5s forwards;
+    margin-bottom: 4rem;
 }
 
 .hero-scroll-indicator {
     position: absolute;
-    bottom: 2rem;
+    bottom: 0.7rem;
     left: 50%;
     transform: translateX(-50%);
-    animation: scrollBounce 2s infinite;
+    animation: scrollBounce 1.7s infinite;
 }
 
 .scroll-arrow {
@@ -1311,13 +1311,15 @@
     }
 }
 
-@media (max-width: 480px) {
+@media (max-width: 785px) {
     .spiral-logo {
         width: 80px;
     }
     
     .hero-title {
         font-size: 2rem;
+        padding: 0.3rem;
+        margin-top: 8rem;
     }
     
     .section-title {
