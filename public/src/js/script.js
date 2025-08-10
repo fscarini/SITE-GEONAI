@@ -268,6 +268,8 @@ function initializeAnimations() {
         });
     });
 
+}
+
     // Parallax effect for hero section
     function updateHeroFade() {
         const heroSection = document.querySelector('.hero');
@@ -296,26 +298,6 @@ function initializeAnimations() {
             heroSection.style.opacity = 1;
         }
     }
-
-    // Typing effect for hero title (removed to fix HTML display issue)
-    // const heroTitle = document.querySelector(".hero-title");
-    // if (heroTitle) {
-    //     const titleText = heroTitle.innerHTML;
-    //     heroTitle.innerHTML = "";
-    //     heroTitle.style.opacity = "1";
-
-    //     let i = 0;
-    //     const typeWriter = () => {
-    //         if (i < titleText.length) {
-    //             heroTitle.innerHTML += titleText.charAt(i);
-    //             i++;
-    //             setTimeout(typeWriter, 50);
-    //         }
-    //     };
-
-    //     setTimeout(typeWriter, 1000);
-    // }
-}
 
 // ===== TESTIMONIALS CAROUSEL =====
 function initializeTestimonials() {
@@ -484,26 +466,46 @@ function initializeContactForm() {
         }
     });
 
-    function submitForm() {
+    const API_URL = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1'
+  ? 'http://localhost:3000/send-email'
+  : 'https://api.seusite.com/send-email'; // produção
+
+
+    async function submitForm() {
         const submitBtn = contactForm.querySelector('.submit-btn');
         const originalText = submitBtn.innerHTML;
-
-        // Show loading state
         submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Enviando...';
         submitBtn.disabled = true;
 
-        // Simulate form submission
-        setTimeout(() => {
-            // Show success message
-            showSuccessMessage();
+        const name = contactForm.querySelector('#name')?.value || '';
+        const email = contactForm.querySelector('#email')?.value || '';
+        const company = contactForm.querySelector('#company')?.value || '';
+        const position = contactForm.querySelector('#position')?.value || '';
+        const messageEl = contactForm.querySelector('#message') || contactForm.querySelector('textarea[name="message"]');
+        const message = messageEl?.value || '';
 
-            // Reset form
-            contactForm.reset();
-
-            // Reset button
+        try {
+            const resp = await fetch(API_URL, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ name, email, company, position, message })
+            });
+            const data = await resp.json();
+            if (resp.ok) {
+                showSuccessMessage();
+                contactForm.reset();
+            } else {
+                // mostra erros de validação vindos do backend
+                const errMsg = data.error || (data.errors ? data.errors.map(e => e.msg).join(', ') : 'Erro ao enviar');
+                alert(errMsg);
+            }
+        } catch (err) {
+            console.error(err);
+            alert('Erro de rede. Tente novamente mais tarde.');
+        } finally {
             submitBtn.innerHTML = originalText;
             submitBtn.disabled = false;
-        }, 2000);
+        }
     }
 
     function showSuccessMessage() {
@@ -594,8 +596,8 @@ function initializeBackToTop() {
     const closeModalBtn = privacyModal.querySelector('.close-modal');
     const privacyCheckbox = document.getElementById('privacy');
 
-    // Ao clicar no label ou texto do checkbox, abrir modal
-    const privacyLabel = document.querySelector('label[for="privacy"]');
+    // Ao clicar no texto do checkbox, abrir modal
+    const privacyLabel = document.getElementById('privacy-link');
     if (privacyLabel) {
         privacyLabel.addEventListener('click', (e) => {
             e.preventDefault(); // Evita marcar/desmarcar
@@ -618,8 +620,8 @@ function initializeBackToTop() {
 }
 
 // ===== FOOTER MODALS =====
-const privacyFooterLink = document.querySelector('.footer-privacy'); 
-const termsFooterLink = document.querySelector('.footer-terms'); 
+const privacyFooterLink = document.querySelector('.footer-privacy');
+const termsFooterLink = document.querySelector('.footer-terms');
 
 const termsModal = document.getElementById('termsModal');
 const privacyModalFooter = document.getElementById('privacyModal');
