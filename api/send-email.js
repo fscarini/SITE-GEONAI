@@ -1,16 +1,21 @@
 import sgMail from '@sendgrid/mail';
 import { body, validationResult } from 'express-validator';
 import dotenv from 'dotenv';
-import cors from 'cors'; // 1. Importar o CORS
+import cors from 'cors';
 
 dotenv.config();
 sgMail.setApiKey(process.env.SENDGRID_API_KEY);
 
-// 2. Inicializar o middleware CORS
+const allowedOrigins = [
+  'https://geonai.tech',
+  'https://geonai.ai',
+  'https://geonai.com.br'
+];
+
 // Esta é a configuração mais segura para produção
 const corsMiddleware = cors({
-  origin: process.env.FRONTEND_URL, // Ex: 'https://www.meu-site.com'
-  methods: ['POST', 'OPTIONS'], // Permitir apenas o método POST
+  origin: allowedOrigins,
+  methods: ['POST', 'OPTIONS'],
 });
 
 // Helper para executar o middleware em um ambiente serverless

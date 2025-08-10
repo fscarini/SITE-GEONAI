@@ -270,34 +270,34 @@ function initializeAnimations() {
 
 }
 
-    // Parallax effect for hero section
-    function updateHeroFade() {
-        const heroSection = document.querySelector('.hero');
-        const aboutSection = document.getElementById('about');
+// Parallax effect for hero section
+function updateHeroFade() {
+    const heroSection = document.querySelector('.hero');
+    const aboutSection = document.getElementById('about');
 
-        if (!heroSection || !aboutSection) {
-            return;
-        }
-
-        const aboutTop = aboutSection.getBoundingClientRect().top;
-        const windowHeight = window.innerHeight;
-
-        // Define o ponto em que o fade deve começar. 
-        // Ex: 0.8 significa que o fade começa quando a seção 'about' está a 80% da altura da tela de distância.
-        const fadeStart = windowHeight * 0.8;
-
-        // Define a rapidez do fade. Um valor menor torna o fade mais rápido.
-        const fadeDuration = windowHeight * 0.6;
-
-        if (aboutTop < fadeStart) {
-            // Calcula a opacidade. O valor diminui de 1 para 0 à medida que a seção 'about' sobe.
-            const opacity = Math.max(0, aboutTop / fadeDuration);
-            heroSection.style.opacity = opacity;
-        } else {
-            // Garante que a opacidade seja 1 se a rolagem estiver antes do ponto de início do fade.
-            heroSection.style.opacity = 1;
-        }
+    if (!heroSection || !aboutSection) {
+        return;
     }
+
+    const aboutTop = aboutSection.getBoundingClientRect().top;
+    const windowHeight = window.innerHeight;
+
+    // Define o ponto em que o fade deve começar. 
+    // Ex: 0.8 significa que o fade começa quando a seção 'about' está a 80% da altura da tela de distância.
+    const fadeStart = windowHeight * 0.8;
+
+    // Define a rapidez do fade. Um valor menor torna o fade mais rápido.
+    const fadeDuration = windowHeight * 0.6;
+
+    if (aboutTop < fadeStart) {
+        // Calcula a opacidade. O valor diminui de 1 para 0 à medida que a seção 'about' sobe.
+        const opacity = Math.max(0, aboutTop / fadeDuration);
+        heroSection.style.opacity = opacity;
+    } else {
+        // Garante que a opacidade seja 1 se a rolagem estiver antes do ponto de início do fade.
+        heroSection.style.opacity = 1;
+    }
+}
 
 // ===== TESTIMONIALS CAROUSEL =====
 function initializeTestimonials() {
@@ -466,9 +466,15 @@ function initializeContactForm() {
         }
     });
 
-    const API_URL = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1'
-  ? 'http://localhost:3000/send-email'
-  : 'https://site-geonai.vercel.app/api/send-email'; // produção
+    // Lista dos seus domínios de produção
+    const productionHostnames = ['geonai.tech', 'geonai.ai', 'geonai.com.br'];
+
+    // Verifica se o hostname atual está na lista de produção
+    const isProduction = productionHostnames.includes(window.location.hostname);
+
+    const API_URL = isProduction
+        ? 'https://site-geonai.vercel.app/api/send-email' // URL de Produção
+        : 'http://localhost:3000/send-email';             // URL de Desenvolvimento Local
 
 
     async function submitForm() {
@@ -545,6 +551,9 @@ function initializeContactForm() {
             text-align: center;
             max-width: 400px;
             border: 1px solid #007bff;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
         `;
 
         const successIcon = modal.querySelector('.success-icon');
