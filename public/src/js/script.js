@@ -4,7 +4,7 @@ const testimonials = document.querySelectorAll('.testimonial-card');
 const dots = document.querySelectorAll('.dot');
 
 // ===== DOM CONTENT LOADED =====
-document.addEventListener('DOMContentLoaded', function() {
+document.addEventListener('DOMContentLoaded', function () {
     // Initialize all components
     initializeLoading();
     initializeNavigation();
@@ -15,7 +15,7 @@ document.addEventListener('DOMContentLoaded', function() {
     initializeContactForm();
     initializeBackToTop();
     initializeSmoothScrolling();
-    
+
     // Initialize AOS (Animate On Scroll)
     AOS.init({
         duration: 1000,
@@ -28,7 +28,7 @@ document.addEventListener('DOMContentLoaded', function() {
 // ===== LOADING SCREEN =====
 function initializeLoading() {
     const loadingScreen = document.getElementById('loading-screen');
-    
+
     // Simulate loading time
     setTimeout(() => {
         loadingScreen.style.opacity = '0';
@@ -71,7 +71,7 @@ function initializeNavigation() {
 
     // Active navigation link highlighting
     const sections = document.querySelectorAll('section[id]');
-    
+
     window.addEventListener('scroll', () => {
         let current = '';
         sections.forEach(section => {
@@ -94,7 +94,7 @@ function initializeNavigation() {
 // ===== SCROLL PROGRESS =====
 function initializeScrollProgress() {
     const scrollProgress = document.querySelector('.scroll-progress');
-    
+
     window.addEventListener('scroll', () => {
         const scrollTop = window.scrollY;
         const docHeight = document.body.scrollHeight - window.innerHeight;
@@ -220,7 +220,7 @@ function initializeAnimations() {
             spiralLogo.style.transform = 'scale(1.1) rotate(360deg)';
             spiralLogo.style.transition = 'transform 0.8s ease-in-out';
         });
-        
+
         spiralLogo.addEventListener('mouseleave', () => {
             spiralLogo.style.transform = 'scale(1) rotate(0deg)';
         });
@@ -235,7 +235,7 @@ function initializeAnimations() {
                 icon.style.transform = 'scale(1.1) rotate(5deg)';
             }
         });
-        
+
         card.addEventListener('mouseleave', () => {
             const icon = card.querySelector('.service-icon');
             if (icon) {
@@ -250,7 +250,7 @@ function initializeAnimations() {
         card.addEventListener('mouseenter', () => {
             card.style.transform = 'translateY(-10px) scale(1.02)';
         });
-        
+
         card.addEventListener('mouseleave', () => {
             card.style.transform = 'translateY(0) scale(1)';
         });
@@ -262,11 +262,13 @@ function initializeAnimations() {
         button.addEventListener('mouseenter', () => {
             button.style.transform = 'translateY(-2px)';
         });
-        
+
         button.addEventListener('mouseleave', () => {
             button.style.transform = 'translateY(0)';
         });
     });
+
+}
 
     // Parallax effect for hero section
     function updateHeroFade() {
@@ -282,10 +284,10 @@ function initializeAnimations() {
 
         // Define o ponto em que o fade deve começar. 
         // Ex: 0.8 significa que o fade começa quando a seção 'about' está a 80% da altura da tela de distância.
-        const fadeStart = windowHeight * 0.8; 
-        
+        const fadeStart = windowHeight * 0.8;
+
         // Define a rapidez do fade. Um valor menor torna o fade mais rápido.
-        const fadeDuration = windowHeight * 0.6; 
+        const fadeDuration = windowHeight * 0.6;
 
         if (aboutTop < fadeStart) {
             // Calcula a opacidade. O valor diminui de 1 para 0 à medida que a seção 'about' sobe.
@@ -296,26 +298,6 @@ function initializeAnimations() {
             heroSection.style.opacity = 1;
         }
     }
-
-    // Typing effect for hero title (removed to fix HTML display issue)
-    // const heroTitle = document.querySelector(".hero-title");
-    // if (heroTitle) {
-    //     const titleText = heroTitle.innerHTML;
-    //     heroTitle.innerHTML = "";
-    //     heroTitle.style.opacity = "1";
-        
-    //     let i = 0;
-    //     const typeWriter = () => {
-    //         if (i < titleText.length) {
-    //             heroTitle.innerHTML += titleText.charAt(i);
-    //             i++;
-    //             setTimeout(typeWriter, 50);
-    //         }
-    //     };
-        
-    //     setTimeout(typeWriter, 1000);
-    // }
-}
 
 // ===== TESTIMONIALS CAROUSEL =====
 function initializeTestimonials() {
@@ -331,17 +313,17 @@ function initializeTestimonials() {
         testimonialCards.forEach(card => {
             card.classList.remove('active');
         });
-        
+
         // Remove active class from all dots
         carouselDots.forEach(dot => {
             dot.classList.remove('active');
         });
-        
+
         // Show current testimonial
         if (testimonialCards[index]) {
             testimonialCards[index].classList.add('active');
         }
-        
+
         // Activate current dot
         if (carouselDots[index]) {
             carouselDots[index].classList.add('active');
@@ -362,7 +344,7 @@ function initializeTestimonials() {
     if (nextBtn) {
         nextBtn.addEventListener('click', nextTestimonial);
     }
-    
+
     if (prevBtn) {
         prevBtn.addEventListener('click', prevTestimonial);
     }
@@ -385,12 +367,12 @@ function initializeTestimonials() {
 // ===== CONTACT FORM =====
 function initializeContactForm() {
     const contactForm = document.getElementById('contactForm');
-    
+
     if (!contactForm) return;
 
     // Form validation
     const inputs = contactForm.querySelectorAll('input, textarea, select');
-    
+
     inputs.forEach(input => {
         input.addEventListener('blur', validateField);
         input.addEventListener('input', clearErrors);
@@ -399,16 +381,16 @@ function initializeContactForm() {
     function validateField(e) {
         const field = e.target;
         const value = field.value.trim();
-        
+
         // Remove existing error styling
         field.classList.remove('error');
-        
+
         // Validate required fields
         if (field.hasAttribute('required') && !value) {
             showFieldError(field, 'Este campo é obrigatório');
             return false;
         }
-        
+
         // Validate email
         if (field.type === 'email' && value) {
             const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -417,7 +399,7 @@ function initializeContactForm() {
                 return false;
             }
         }
-        
+
         // Validate phone
         if (field.type === 'tel' && value) {
             const phoneRegex = /^[\d\s\-\(\)\+]+$/;
@@ -426,19 +408,19 @@ function initializeContactForm() {
                 return false;
             }
         }
-        
+
         return true;
     }
 
     function showFieldError(field, message) {
         field.classList.add('error');
-        
+
         // Remove existing error message
         const existingError = field.parentNode.querySelector('.error-message');
         if (existingError) {
             existingError.remove();
         }
-        
+
         // Add new error message
         const errorDiv = document.createElement('div');
         errorDiv.className = 'error-message';
@@ -446,14 +428,14 @@ function initializeContactForm() {
         errorDiv.style.color = '#ff4757';
         errorDiv.style.fontSize = '0.8rem';
         errorDiv.style.marginTop = '0.25rem';
-        
+
         field.parentNode.appendChild(errorDiv);
     }
 
     function clearErrors(e) {
         const field = e.target;
         field.classList.remove('error');
-        
+
         const errorMessage = field.parentNode.querySelector('.error-message');
         if (errorMessage) {
             errorMessage.remove();
@@ -461,9 +443,9 @@ function initializeContactForm() {
     }
 
     // Form submission
-    contactForm.addEventListener('submit', function(e) {
+    contactForm.addEventListener('submit', function (e) {
         e.preventDefault();
-        
+
         // Validate all fields
         let isValid = true;
         inputs.forEach(input => {
@@ -471,39 +453,59 @@ function initializeContactForm() {
                 isValid = false;
             }
         });
-        
+
         // Check privacy checkbox
         const privacyCheckbox = document.getElementById('privacy');
         if (!privacyCheckbox.checked) {
             showFieldError(privacyCheckbox, 'Você deve aceitar os termos de privacidade');
             isValid = false;
         }
-        
+
         if (isValid) {
             submitForm();
         }
     });
 
-    function submitForm() {
+    const API_URL = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1'
+  ? 'http://localhost:3000/send-email'
+  : 'https://api.seusite.com/send-email'; // produção
+
+
+    async function submitForm() {
         const submitBtn = contactForm.querySelector('.submit-btn');
         const originalText = submitBtn.innerHTML;
-        
-        // Show loading state
         submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Enviando...';
         submitBtn.disabled = true;
-        
-        // Simulate form submission
-        setTimeout(() => {
-            // Show success message
-            showSuccessMessage();
-            
-            // Reset form
-            contactForm.reset();
-            
-            // Reset button
+
+        const name = contactForm.querySelector('#name')?.value || '';
+        const email = contactForm.querySelector('#email')?.value || '';
+        const company = contactForm.querySelector('#company')?.value || '';
+        const position = contactForm.querySelector('#position')?.value || '';
+        const messageEl = contactForm.querySelector('#message') || contactForm.querySelector('textarea[name="message"]');
+        const message = messageEl?.value || '';
+
+        try {
+            const resp = await fetch(API_URL, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ name, email, company, position, message })
+            });
+            const data = await resp.json();
+            if (resp.ok) {
+                showSuccessMessage();
+                contactForm.reset();
+            } else {
+                // mostra erros de validação vindos do backend
+                const errMsg = data.error || (data.errors ? data.errors.map(e => e.msg).join(', ') : 'Erro ao enviar');
+                alert(errMsg);
+            }
+        } catch (err) {
+            console.error(err);
+            alert('Erro de rede. Tente novamente mais tarde.');
+        } finally {
             submitBtn.innerHTML = originalText;
             submitBtn.disabled = false;
-        }, 2000);
+        }
     }
 
     function showSuccessMessage() {
@@ -520,7 +522,7 @@ function initializeContactForm() {
                 <button class="btn btn-primary close-modal">Fechar</button>
             </div>
         `;
-        
+
         // Add modal styles
         modal.style.cssText = `
             position: fixed;
@@ -534,7 +536,7 @@ function initializeContactForm() {
             align-items: center;
             z-index: 10000;
         `;
-        
+
         const modalContent = modal.querySelector('.modal-content');
         modalContent.style.cssText = `
             background: #0A1128;
@@ -544,21 +546,21 @@ function initializeContactForm() {
             max-width: 400px;
             border: 1px solid #007bff;
         `;
-        
+
         const successIcon = modal.querySelector('.success-icon');
         successIcon.style.cssText = `
             font-size: 3rem;
             color: #28a745;
             margin-bottom: 1rem;
         `;
-        
+
         document.body.appendChild(modal);
-        
+
         // Close modal
         modal.querySelector('.close-modal').addEventListener('click', () => {
             document.body.removeChild(modal);
         });
-        
+
         // Close on backdrop click
         modal.addEventListener('click', (e) => {
             if (e.target === modal) {
@@ -571,7 +573,7 @@ function initializeContactForm() {
 // ===== BACK TO TOP BUTTON =====
 function initializeBackToTop() {
     const backToTopBtn = document.getElementById('backToTop');
-    
+
     if (!backToTopBtn) return;
 
     window.addEventListener('scroll', () => {
@@ -588,23 +590,94 @@ function initializeBackToTop() {
             behavior: 'smooth'
         });
     });
+
+    // ===== PRIVACY POLICY MODAL =====
+    const privacyModal = document.getElementById('privacyModal');
+    const closeModalBtn = privacyModal.querySelector('.close-modal');
+    const privacyCheckbox = document.getElementById('privacy');
+
+    // Ao clicar no texto do checkbox, abrir modal
+    const privacyLabel = document.getElementById('privacy-link');
+    if (privacyLabel) {
+        privacyLabel.addEventListener('click', (e) => {
+            e.preventDefault(); // Evita marcar/desmarcar
+            privacyModal.style.display = 'block';
+        });
+    }
+
+    // Fechar modal ao clicar no botão X
+    closeModalBtn.addEventListener('click', () => {
+        privacyModal.style.display = 'none';
+    });
+
+    // Fechar modal ao clicar fora do conteúdo
+    window.addEventListener('click', (e) => {
+        if (e.target === privacyModal) {
+            privacyModal.style.display = 'none';
+        }
+    });
+
 }
+
+// ===== FOOTER MODALS =====
+const privacyFooterLink = document.querySelector('.footer-privacy');
+const termsFooterLink = document.querySelector('.footer-terms');
+
+const termsModal = document.getElementById('termsModal');
+const privacyModalFooter = document.getElementById('privacyModal');
+
+function openModal(modal) {
+    modal.style.display = 'block';
+}
+
+function closeModal(modal) {
+    modal.style.display = 'none';
+}
+
+// Eventos para abrir
+if (privacyFooterLink) {
+    privacyFooterLink.addEventListener('click', (e) => {
+        e.preventDefault();
+        openModal(privacyModalFooter);
+    });
+}
+
+if (termsFooterLink) {
+    termsFooterLink.addEventListener('click', (e) => {
+        e.preventDefault();
+        openModal(termsModal);
+    });
+}
+
+// Eventos para fechar (botão X)
+document.querySelectorAll('.privacy-modal .close-modal').forEach(btn => {
+    btn.addEventListener('click', () => {
+        closeModal(btn.closest('.privacy-modal'));
+    });
+});
+
+// Fechar ao clicar fora
+window.addEventListener('click', (e) => {
+    if (e.target.classList.contains('privacy-modal')) {
+        closeModal(e.target);
+    }
+});
 
 // ===== SMOOTH SCROLLING =====
 function initializeSmoothScrolling() {
     const links = document.querySelectorAll('a[href^="#"]');
-    
+
     links.forEach(link => {
-        link.addEventListener('click', function(e) {
+        link.addEventListener('click', function (e) {
             e.preventDefault();
-            
+
             const targetId = this.getAttribute('href');
             const targetSection = document.querySelector(targetId);
-            
+
             if (targetSection) {
                 const headerHeight = document.querySelector('.header').offsetHeight;
                 const targetPosition = targetSection.offsetTop - headerHeight;
-                
+
                 window.scrollTo({
                     top: targetPosition,
                     behavior: 'smooth'
@@ -652,7 +725,7 @@ function debounce(func, wait) {
 // Throttle function for scroll events
 function throttle(func, limit) {
     let inThrottle;
-    return function() {
+    return function () {
         const args = arguments;
         const context = this;
         if (!inThrottle) {
@@ -687,7 +760,7 @@ function updateScrollProgress() {
 function updateActiveNavigation() {
     const sections = document.querySelectorAll('section[id]');
     const navLinks = document.querySelectorAll('.nav-link');
-    
+
     let current = '';
     sections.forEach(section => {
         const sectionTop = section.offsetTop;
@@ -721,7 +794,7 @@ window.addEventListener('scroll', optimizedScrollHandler);
 // ===== ACCESSIBILITY ENHANCEMENTS =====
 
 // Keyboard navigation support
-document.addEventListener('keydown', function(e) {
+document.addEventListener('keydown', function (e) {
     // ESC key to close modals
     if (e.key === 'Escape') {
         const modals = document.querySelectorAll('.success-modal');
@@ -731,7 +804,7 @@ document.addEventListener('keydown', function(e) {
             }
         });
     }
-    
+
     // Enter key for button activation
     if (e.key === 'Enter' && e.target.classList.contains('btn')) {
         e.target.click();
@@ -742,7 +815,7 @@ document.addEventListener('keydown', function(e) {
 function manageFocus() {
     const hamburger = document.querySelector('.hamburger');
     const navMenu = document.querySelector('.nav-menu');
-    
+
     hamburger.addEventListener('click', () => {
         if (navMenu.classList.contains('active')) {
             // Focus first menu item when menu opens
@@ -760,13 +833,13 @@ manageFocus();
 // ===== ERROR HANDLING =====
 
 // Global error handler
-window.addEventListener('error', function(e) {
+window.addEventListener('error', function (e) {
     console.error('JavaScript Error:', e.error);
     // You could send this to an error tracking service
 });
 
 // Promise rejection handler
-window.addEventListener('unhandledrejection', function(e) {
+window.addEventListener('unhandledrejection', function (e) {
     console.error('Unhandled Promise Rejection:', e.reason);
     // You could send this to an error tracking service
 });
@@ -781,11 +854,11 @@ function checkBrowserSupport() {
         'classList',
         'requestAnimationFrame'
     ];
-    
+
     const unsupportedFeatures = requiredFeatures.filter(feature => {
         return !(feature in document || feature in window || feature in Element.prototype);
     });
-    
+
     if (unsupportedFeatures.length > 0) {
         console.warn('Some features may not work in this browser:', unsupportedFeatures);
         // You could show a browser upgrade message here
@@ -815,7 +888,7 @@ if (typeof module !== 'undefined' && module.exports) {
 }
 
 // ===== MOUSE FOLLOWER EFFECT =====
-document.addEventListener('DOMContentLoaded', function() {
+document.addEventListener('DOMContentLoaded', function () {
     // Criar elemento seguidor do mouse
     const mouseFollower = document.createElement('div');
     mouseFollower.className = 'mouse-follower';
@@ -827,7 +900,7 @@ document.addEventListener('DOMContentLoaded', function() {
     let followerY = 0;
 
     // Capturar posição do mouse
-    document.addEventListener('mousemove', function(e) {
+    document.addEventListener('mousemove', function (e) {
         mouseX = e.clientX;
         mouseY = e.clientY;
     });
@@ -848,14 +921,14 @@ document.addEventListener('DOMContentLoaded', function() {
 
     // Efeito de hover em elementos interativos
     const interactiveElements = document.querySelectorAll('a, button, .service-card, .project-card, .team-member');
-    
+
     interactiveElements.forEach(element => {
-        element.addEventListener('mouseenter', function() {
+        element.addEventListener('mouseenter', function () {
             mouseFollower.style.transform = 'translate(-50%, -50%) scale(1.5)';
             mouseFollower.style.opacity = '0.9';
         });
 
-        element.addEventListener('mouseleave', function() {
+        element.addEventListener('mouseleave', function () {
             mouseFollower.style.transform = 'translate(-50%, -50%) scale(1)';
             mouseFollower.style.opacity = '0.7';
         });
@@ -864,7 +937,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
 
 // ===== MOUSE FOLLOWER EFFECT =====
-document.addEventListener("DOMContentLoaded", function() {
+document.addEventListener("DOMContentLoaded", function () {
     // Criar elemento seguidor do mouse
     const mouseFollower = document.createElement("div");
     mouseFollower.className = "mouse-follower";
@@ -876,7 +949,7 @@ document.addEventListener("DOMContentLoaded", function() {
     let followerY = 0;
 
     // Capturar posição do mouse
-    document.addEventListener("mousemove", function(e) {
+    document.addEventListener("mousemove", function (e) {
         mouseX = e.clientX;
         mouseY = e.clientY;
     });
@@ -897,14 +970,14 @@ document.addEventListener("DOMContentLoaded", function() {
 
     // Efeito de hover em elementos interativos
     const interactiveElements = document.querySelectorAll("a, button, .service-card, .project-card, .team-member");
-    
+
     interactiveElements.forEach(element => {
-        element.addEventListener("mouseenter", function() {
+        element.addEventListener("mouseenter", function () {
             mouseFollower.style.transform = "translate(-50%, -50%) scale(1.5)";
             mouseFollower.style.opacity = "0.9";
         });
 
-        element.addEventListener("mouseleave", function() {
+        element.addEventListener("mouseleave", function () {
             mouseFollower.style.transform = "translate(-50%, -50%) scale(1)";
             mouseFollower.style.opacity = "0.7";
         });
