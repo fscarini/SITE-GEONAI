@@ -12,6 +12,7 @@
   "description": "",
   "dependencies": {
     "@sendgrid/mail": "^8.1.5",
+    "@upstash/redis": "^1.35.3",
     "cors": "^2.8.5",
     "dotenv": "^17.2.1",
     "express-validator": "^7.2.1",

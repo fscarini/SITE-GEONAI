@@ -2,9 +2,29 @@ import sgMail from '@sendgrid/mail';
 import { body, validationResult } from 'express-validator';
 import dotenv from 'dotenv';
 import cors from 'cors';
+import { Redis } from '@upstash/redis';
 
 dotenv.config();
 sgMail.setApiKey(process.env.SENDGRID_API_KEY);
+
+const isDev = process.env.NODE_ENV
+
+const redis = new Redis({
+  url: process.env.UPSTASH_REDIS_REST_URL,
+  token: process.env.UPSTASH_REDIS_REST_TOKEN,
+});
+
+async function isRateLimited(ip) {
+  const key = `rate_limit:${ip}`;
+  const current = await redis.incr(key);
+
+  if (current === 1) {
+    await redis.expire(key, 60);
+  }
+
+  return current > 5;
+}
+
 
 const allowedOrigins = [
   'https://geonai.tech',
@@ -31,18 +51,39 @@ const runMiddleware = (req, res, fn) => {
 };
 
 export default async function handler(req, res) {
-  // 3. Executar o middleware no início da função
+
+  // Cabeçalhos de segurança
+  res.setHeader('X-Content-Type-Options', 'nosniff');
+  res.setHeader('X-Frame-Options', 'DENY');
+  res.setHeader('X-XSS-Protection', '1; mode=block');
+  res.setHeader('Referrer-Policy', 'no-referrer');
+
+  // Executa middleware CORS
   await runMiddleware(req, res, corsMiddleware);
 
   if (req.method !== 'POST') {
     return res.status(405).json({ error: 'Método não permitido' });
   }
 
-  // O resto do seu código permanece o mesmo...
+  // Honeypot contra bots
+  if (req.body.website) {
+    return res.status(400).json({ error: 'Bot detectado.' });
+  }
+
+  //  Pega IP do usuário
+  const ip = req.headers['x-forwarded-for']?.split(',')[0] || req.socket.remoteAddress;
+
+  //  Verifica rate limit
+  if (await isRateLimited(ip)) {
+    return res.status(429).json({ error: 'Muitas solicitações. Tente novamente mais tarde.' });
+  }
+
   await Promise.all([
-    body('name').trim().notEmpty().withMessage('Nome é obrigatório').run(req),
-    body('email').trim().isEmail().withMessage('E-mail inválido').run(req),
-    body('message').trim().notEmpty().withMessage('Mensagem é obrigatória').run(req),
+    body('name').trim().escape().notEmpty().withMessage('Nome é obrigatório').run(req),
+    body('email').trim().escape().isEmail().withMessage('E-mail inválido').run(req),
+    body('message').trim().escape().notEmpty().withMessage('Mensagem é obrigatória').run(req),
+    body('company').optional().trim().escape(),
+    body('position').optional().trim().escape()
   ]);
 
   const errors = validationResult(req);
@@ -51,14 +92,17 @@ export default async function handler(req, res) {
   }
 
   const { name, email, company, position, message } = req.body;
+  const cleanName = name.replace(/(\r|\n)/g, '');
+  const cleanEmail = email.replace(/(\r|\n)/g, '');
+
 
   const msg = {
     to: process.env.EMAIL_DESTINO,
     from: 'no-reply@geonai.com.br',
-    subject: `[Site] Novo contato: ${name}`,
+    subject: `[Site] Novo contato: ${cleanName}`,
     replyTo: {
-        name: name,
-        email: email,
+        name: cleanName,
+        email: cleanEmail,
     },
     text: `${message}\n\n---\nNome: ${name}\nEmail: ${email}\nEmpresa: ${company || '-'}\nCargo: ${position || '-'}`,
     html: `
@@ -76,8 +120,8 @@ export default async function handler(req, res) {
     return res.status(200).json({ success: true, message: 'E-mail enviado com sucesso.' });
   } catch (err) {
     console.error('❌ Erro ao enviar e-mail com SendGrid:', err.message);
-    if (err.response) {
-      console.error(err.response.body);
+    if (isDev && err.response) {
+      console.error('Detalhes do erro: ', err.response.body);
     }
     return res.status(500).json({ error: 'Erro interno ao processar a solicitação.' });
   }
