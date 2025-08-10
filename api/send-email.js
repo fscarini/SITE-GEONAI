@@ -10,7 +10,7 @@ sgMail.setApiKey(process.env.SENDGRID_API_KEY);
 // Esta é a configuração mais segura para produção
 const corsMiddleware = cors({
   origin: process.env.FRONTEND_URL, // Ex: 'https://www.meu-site.com'
-  methods: ['POST'], // Permitir apenas o método POST
+  methods: ['POST', 'OPTIONS'], // Permitir apenas o método POST
 });
 
 // Helper para executar o middleware em um ambiente serverless
