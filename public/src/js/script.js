@@ -468,7 +468,7 @@ function initializeContactForm() {
 
     const API_URL = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1'
   ? 'http://localhost:3000/send-email'
-  : 'https://api.seusite.com/send-email'; // produção
+  : 'https://site-geonai.vercel.app/api/send-email'; // produção
 
 
     async function submitForm() {
