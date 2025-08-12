@@ -1340,6 +1340,41 @@
     }
 }
 
+/* ===== AJUSTES PARA ALTURA BAIXA ===== */
+@media (max-height: 750px) {
+    .hero {
+        min-height: 100vh; /* Evita forçar a tela cheia */
+        padding: 4rem 1rem;
+    }
+
+    .hero-title {
+        font-size: clamp(1.8rem, 4vw, 2.5rem);
+        padding: 5rem 0 0 0;
+    }
+
+    .hero-subtitle {
+        font-size: clamp(1rem, 2.5vw, 1.1rem);
+        margin-bottom: 2rem;
+    }
+
+    .hero-buttons {
+        margin-bottom: 2rem;
+    }
+
+    .about, .services, .contact {
+        padding: 3rem 0;
+    }
+
+    .team-grid, .services-grid {
+        gap: 1rem;
+    }
+
+    .service-card {
+        padding: 1.5rem;
+    }
+}
+
+
 @media (max-width: 768px) {
     .container {
         padding: 0 1rem;
@@ -1413,7 +1448,7 @@
     
     .hero-title {
         font-size: 2rem;
-        padding: 0.3rem;
+        padding: 2rem;
         margin-top: 8rem;
     }
     
