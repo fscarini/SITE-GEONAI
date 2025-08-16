@@ -675,8 +675,7 @@
 }
 
 .project-image {
-    height: 200px;
-    background: var(--gradient-primary);
+    height: auto;
     position: relative;
     display: flex;
     align-items: center;
