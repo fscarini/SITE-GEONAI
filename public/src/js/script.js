@@ -59,15 +59,6 @@ function initializeNavigation() {
         });
     });
 
-    // Header background on scroll
-    window.addEventListener('scroll', () => {
-        const header = document.querySelector('.header');
-        if (window.scrollY > 100) {
-            header.style.background = 'rgba(10, 17, 40, 0.98)';
-        } else {
-            header.style.background = 'rgba(10, 17, 40, 0.95)';
-        }
-    });
 
     // Active navigation link highlighting
     const sections = document.querySelectorAll('section[id]');
@@ -99,7 +90,6 @@ function initializeScrollProgress() {
         const scrollTop = window.scrollY;
         const docHeight = document.body.scrollHeight - window.innerHeight;
         const scrollPercent = (scrollTop / docHeight) * 100;
-        scrollProgress.style.width = scrollPercent + '%';
     });
 }
 

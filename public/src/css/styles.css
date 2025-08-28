@@ -113,6 +113,11 @@
     transition: opacity 0.5s ease-out;
 }
 
+.loading-logo-img{
+    height: 4rem;
+    margin-bottom: 21px;
+}
+
 .spiral-loader {
     position: relative;
     width: 100px;
@@ -168,17 +173,23 @@
 /* ===== HEADER ===== */
 .header {
     position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    background: rgba(10, 17, 40, 0.95);
-    backdrop-filter: blur(10px);
+    top: 1.5rem; /* Adiciona um espaço no topo */
+    left: 50%;
+    transform: translateX(-50%); /* Centraliza o header */
+    width: auto; /* A largura será definida pelo conteúdo */
     z-index: 1000;
     transition: var(--transition);
 }
 
 .navbar {
-    padding: 1rem 0;
+    position: relative; /* Adicione esta linha */
+    padding: 0.8rem 1.5rem;
+    background: rgba(26, 35, 50, 0.75);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+    border-radius: 50px;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    box-shadow: var(--shadow-medium);
 }
 
 .nav-container {
@@ -187,18 +198,24 @@
     align-items: center;
     max-width: 1500px;
     margin: 0 auto;
-    padding: 0 2rem;
+    padding: 0 2.4rem;
 }
 
-.nav-logo .logo-img {
-    height: 45px;
+.nav-logo {
+    display: flex;
+    margin: 0;
+    margin-right: 5rem; 
+}
+
+.logo-img {
+    height: 33px;
     width: auto;
 }
 
 .nav-menu {
     display: flex;
     list-style: none;
-    gap: 2.3rem;
+    gap: 2.8rem;
     align-items: center;
 }
 
@@ -209,6 +226,7 @@
     font-weight: 500;
     transition: var(--transition);
     position: relative;
+    white-space: nowrap;
 }
 
 .nav-link::after {
@@ -250,16 +268,6 @@
     margin: 3px 0;
     transition: var(--transition);
 }
-
-.scroll-progress {
-    position: absolute;
-    bottom: 0;
-    left: 0;
-    height: 3px;
-    background: var(--gradient-primary);
-    transition: width 0.1s ease;
-}
-
 /* ===== HERO SECTION ===== */
 .hero {
     min-height: 100vh;
@@ -1310,36 +1318,64 @@
 
 /* ===== RESPONSIVE DESIGN ===== */
 @media (max-width: 926px){
-    
+
     .nav-menu {
-        position: fixed;
-        left: -100%;
-        top: 70px;
+        /* Posiciona o menu como um dropdown, abaixo do header */
+        position: absolute;
+        top: calc(100% + 15px); /* 100% da altura do pai (.navbar) + 15px de espaço */
+        left: 50%;
+        transform: translateX(-50%) translateY(-10px);
+        
+        /* Estilos do container do menu */
+        width: 90vw; /* Ocupa 90% da largura da tela */
+        max-width: 320px; /* Largura máxima */
         flex-direction: column;
-        background: rgba(10, 17, 40, 0.98);
-        width: 100%;
-        text-align: center;
-        transition: 0.3s;
-        box-shadow: var(--shadow-medium);
-        padding: 2rem 0;
+        background: rgba(26, 35, 50, 0.9);
+        backdrop-filter: blur(10px);
+        -webkit-backdrop-filter: blur(10px);
+        padding: 1rem;
+        border-radius: var(--border-radius);
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        box-shadow: var(--shadow-heavy);
+
+        /* Esconde o menu por padrão com uma transição suave */
+        opacity: 0;
+        visibility: hidden;
+        pointer-events: none;
+        transition: all 0.3s ease;
     }
     
     .nav-menu.active {
-        left: 0;
+        /* Mostra o menu quando o hamburger for clicado */
+        opacity: 1;
+        visibility: visible;
+        pointer-events: auto;
+        transform: translateX(-50%) translateY(0);
     }
-    
+
+    /* Garante que os links do menu ocupem a largura total */
+    .nav-item {
+        width: 100%;
+    }
+    .nav-link {
+        display: block;
+        padding: 0.75rem;
+        text-align: center;
+    }
+    .nav-link.cta-button {
+        margin-top: 0.5rem;
+    }
+
+    /* Estilos para o ícone do hamburguer */
     .hamburger {
         display: flex;
     }
-    
     .hamburger.active .bar:nth-child(2) {
         opacity: 0;
     }
-    
     .hamburger.active .bar:nth-child(1) {
         transform: translateY(8px) rotate(45deg);
     }
-    
     .hamburger.active .bar:nth-child(3) {
         transform: translateY(-8px) rotate(-45deg);
     }
@@ -1380,7 +1416,7 @@
 }
 
 
-@media (max-width: 768px) {
+@media (max-width: 825px) {
     .container {
         padding: 0 1rem;
     }
@@ -1565,4 +1601,143 @@
     transform: translate(-50%, -50%);
     filter: blur(10px);
 }
+}
+
+/* ==========================================================================
+   MEDIA QUERIES PARA TELAS GRANDES E TELEVISÕES (Full HD e 4K)
+   ========================================================================== */
+
+@media screen and (min-width: 1920px) {
+
+    /* --------------------------------------------------------------------------
+     * PASSO 1: FUNDAÇÃO - AJUSTES GLOBAIS
+     * Expandimos a base do site para telas maiores.
+     * -------------------------------------------------------------------------- */
+
+    html {
+        /* Aumentamos o tamanho da fonte base. Todos os elementos com unidade 'rem'
+           crescerão proporcionalmente, mantendo a harmonia. */
+        font-size: 18px;
+    }
+
+    .container {
+        /* Aumentamos a largura máxima do conteúdo para aproveitar melhor o espaço
+           horizontal, reduzindo as margens laterais excessivas. */
+        max-width: 1600px;
+    }
+
+    /* Ajustamos o tamanho máximo dos títulos para garantir a legibilidade à distância.
+       Os valores do clamp() em reset.css são bons, mas limitados para telas tão grandes. */
+    h1 { font-size: 4.5rem; }
+    h2.section-title { font-size: 3.5rem; }
+    h3 { font-size: 2.25rem; }
+
+
+    /* --------------------------------------------------------------------------
+     * PASSO 2: AJUSTE DE COMPONENTES ESPECÍFICOS
+     * Corrigimos cada seção baseando-nos na sua estrutura HTML.
+     * -------------------------------------------------------------------------- */
+
+    /* ----- Header ----- */
+    .header .navbar {
+        /* Aumentamos o padding interno do header para que ele não pareça tão
+           pequeno e adicionamos uma largura máxima para que ele cresça, mas não infinitamente. */
+        padding: 1rem 3rem;
+        max-width: 1800px;
+    }
+
+    .header .nav-menu {
+        /* Aumentamos o espaçamento entre os links do menu. */
+        gap: 3.5rem;
+    }
+
+
+    /* ----- Seção Hero (#home) ----- */
+    .hero-title {
+        /* O problema principal aqui. Reduzimos o espaçamento entre linhas (line-height)
+           para criar um bloco de texto mais coeso e impactante. */
+        line-height: 1.1;
+        margin-bottom: 2.5rem;
+    }
+
+    .hero-subtitle {
+        /* Aumentamos a largura máxima do subtítulo para que ele se ajuste melhor
+           ao novo tamanho do container. */
+        max-width: 900px;
+        font-size: 1.4rem; /* Tamanho de fonte específico para o subtítulo */
+    }
+
+    /* ----- Seção Sobre Nós (#about) ----- */
+    .about-story,
+    .about-mission,
+    .about-vision {
+        /* CRÍTICO: Para evitar linhas de texto excessivamente longas e ilegíveis,
+           limitamos a largura máxima destes cards e os centramos em seu espaço no grid. */
+        max-width: 900px;
+        margin-left: auto;
+        margin-right: auto;
+    }
+
+    .values-grid {
+        /* No grid de valores, definimos explicitamente 4 colunas. Isso impede que o
+           'auto-fit' crie mais colunas e quebre o design. */
+        grid-template-columns: repeat(4, 1fr);
+    }
+    
+    .team-grid {
+        /* O mesmo para a equipe, garantimos 3 colunas para um layout estável. */
+        grid-template-columns: repeat(3, 1fr);
+    }
+
+    /* ----- Seção Serviços (#services) ----- */
+    .services-grid {
+        /* Definimos um layout fixo de 3 colunas para os serviços, evitando que o
+           grid se expanda para 4 ou 5 colunas e deixe os cards muito estreitos. */
+        grid-template-columns: repeat(3, 1fr);
+        gap: 2.5rem; /* Aumentamos o espaçamento entre os cards */
+    }
+
+
+    /* ----- Seção Projetos (#projects) ----- */
+    .projects-grid {
+        /* Para os projetos, um layout de 2 colunas em telas muito largas fica
+           mais elegante e dá mais peso a cada projeto. */
+        grid-template-columns: repeat(2, 1fr);
+        max-width: 1400px; /* Limitamos a largura para não esticar demais os cards */
+        margin-left: auto;
+        margin-right: auto;
+    }
+
+
+    /* ----- Seção Contato (#contact) ----- */
+    .contact-content {
+        /* Ajustamos o grid do formulário para dar um pouco mais de espaço (1.2fr) ao
+           formulário e alinhamos verticalmente os itens ao centro para resolver o
+           desequilíbrio visual. */
+        grid-template-columns: 1.2fr 1fr;
+        align-items: center;
+        gap: 5rem;
+    }
+}
+
+/* ==========================================================================
+   AJUSTES ADICIONAIS E OPCIONAIS PARA TELAS 4K (UHD)
+   ========================================================================== */
+
+@media screen and (min-width: 3800px) {
+    /* Para telas 4K, podemos ir além. */
+
+    html {
+        font-size: 24px; /* Aumenta ainda mais a legibilidade à distância */
+    }
+
+    .container {
+        max-width: 2500px; /* Permite que o conteúdo ocupe mais espaço */
+    }
+
+    .projects-grid, .services-grid {
+        /* Em 4K, podemos voltar a ter 3 colunas para projetos e serviços
+           sem que o layout pareça lotado. */
+        grid-template-columns: repeat(3, 1fr);
+    }
 }
