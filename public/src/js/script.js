@@ -704,7 +704,7 @@ function initializeContactForm() {
     const isProduction = productionHostnames.includes(window.location.hostname);
 
     const API_URL = isProduction
-        ? 'https://site-geonai.vercel.app/api/send-email' // URL de Produção
+        ? '/api/send-email' // URL de Produção
         : 'http://localhost:3000/send-email';             // URL de Desenvolvimento Local
 
 

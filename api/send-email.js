@@ -27,6 +27,8 @@ async function isRateLimited(ip) {
 
 
 const allowedOrigins = [
+  'https://geonai.com.br',        
+  'https://www.geonai.com.br',    
   'https://geonai.tech',
   'https://geonai.ai',
   'https://geonai.com.br'
