@@ -8,6 +8,7 @@ document.addEventListener('DOMContentLoaded', function () {
     // Initialize all components
     initializeLoading();
     initializeNavigation();
+    initializeHeaderScroll(); 
     initializeScrollProgress();
     initializeParticles();
     initializeAnimations();
@@ -37,6 +38,25 @@ function initializeLoading() {
             document.body.style.overflow = 'visible';
         }, 500);
     }, 2000);
+}
+
+// ===== HEADER SCROLL EFFECT =====
+function initializeHeaderScroll() {
+    const header = document.querySelector('.header');
+    if (!header) return;
+
+    const scrollThreshold = 50; // Distância em pixels para ativar o efeito
+
+    const handleScroll = () => {
+        if (window.scrollY > scrollThreshold) {
+            header.classList.add('scrolled');
+        } else {
+            header.classList.remove('scrolled');
+        }
+    };
+
+    window.addEventListener('scroll', handleScroll);
+    handleScroll(); // Executa uma vez no carregamento para verificar a posição inicial
 }
 
 // ===== NAVIGATION =====
@@ -234,6 +254,227 @@ function initializeAnimations() {
         });
     });
 
+// ===== AI CHAT INTERACTION =====
+    const chatForm = document.getElementById('chat-form');
+    if (chatForm) {
+        initializeAiChat();
+    }
+};
+
+function initializeAiChat() {
+    const N8N_WEBHOOK_URL = '/api/chat';
+
+    const form = document.getElementById('chat-form');
+    const input = document.getElementById('chat-input');
+    const chatWindow = document.getElementById('chat-window');
+    const submitBtn = document.getElementById('chat-submit-btn');
+    const micBtn = document.getElementById('mic-btn');
+
+const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+    let recognition;
+
+    if (SpeechRecognition) {
+        recognition = new SpeechRecognition();
+        recognition.lang = 'pt-BR';
+        recognition.interimResults = true; // <-- MUDANÇA 1: HABILITA TRANSCRIÇÃO EM TEMPO REAL
+        recognition.maxAlternatives = 1;
+
+        micBtn.addEventListener('click', () => {
+            const placeholder = document.getElementById('chat-placeholder');
+            if (placeholder) {
+                placeholder.remove();
+                chatWindow.classList.add('first-message-sent');
+            }
+
+            try {
+                recognition.start();
+                micBtn.classList.add('listening');
+                input.placeholder = 'Ouvindo... Fale agora.';
+            } catch (err) {
+                console.error("Erro ao iniciar gravação (provavelmente já estava ativa):", err);
+            }
+        });
+
+        // MUDANÇA 2: 'onresult' agora atualiza o input em tempo real
+        recognition.onresult = (event) => {
+            let interim_transcript = '';
+            let final_transcript = '';
+
+            for (let i = event.resultIndex; i < event.results.length; ++i) {
+                const transcript_piece = event.results[i][0].transcript;
+                if (event.results[i].isFinal) {
+                    final_transcript += transcript_piece;
+                } else {
+                    interim_transcript += transcript_piece;
+                }
+            }
+            // Mostra o texto em tempo real no input
+            input.value = final_transcript + interim_transcript;
+        };
+
+        // MUDANÇA 3: 'onend' agora é responsável por enviar o formulário
+        recognition.onend = () => {
+            micBtn.classList.remove('listening');
+            input.placeholder = 'Envie uma mensagem para Lia...';
+
+            // Dispara o 'submit' QUANDO o usuário para de falar
+            if (input.value.trim()) {
+                form.dispatchEvent(new Event('submit', { cancelable: true, bubbles: true }));
+            }
+        };
+
+        recognition.onerror = (event) => {
+            console.error('Erro no reconhecimento de fala:', event.error);
+            micBtn.classList.remove('listening');
+            if(event.error === 'no-speech') {
+                input.placeholder = 'Não ouvi nada. Tente novamente.';
+            } else if (event.error === 'not-allowed') {
+                input.placeholder = 'Microfone bloqueado. Habilite nas configurações.';
+            } else {
+                input.placeholder = 'Erro ao ouvir. Tente novamente.';
+            }
+        };
+
+    } else {
+        console.warn('Web Speech API não suportada neste navegador.');
+        micBtn.style.display = 'none';
+    }
+    // --- FIM DA MODIFICAÇÃO (SPEECH-TO-TEXT) ---
+
+    // 1. Tenta buscar um ID de sessão já existente no navegador
+    let sessionId = localStorage.getItem('geon_chat_session_id');
+
+    // 2. Se não existir, cria um novo e salva
+    if (!sessionId) {
+        try {
+            // crypto.randomUUID() é o método moderno, seguro e universal
+            sessionId = crypto.randomUUID(); 
+            localStorage.setItem('geon_chat_session_id', sessionId);
+        } catch (err) {
+            console.error("Erro ao gerar sessionId:", err);
+            // Fallback simples para navegadores muito antigos
+            sessionId = 'fallback-' + Date.now() + '-' + Math.random().toString(36).substring(2);
+            localStorage.setItem('geon_chat_session_id', sessionId);
+        }
+    }
+    // Agora, a variável 'sessionId' tem um ID único para este usuário.
+
+    // --- FIM DA MODIFICAÇÃO PARA SESSION ID ---
+
+    form.addEventListener('submit', async function (e) {
+        e.preventDefault(); // Impede o recarregamento da página
+
+        // 1. Encontra e remove o placeholder assim que o usuário interage
+        const placeholder = document.getElementById('chat-placeholder');
+        if (placeholder) {
+            placeholder.remove();
+        }
+
+        const userMessage = input.value.trim();
+
+        if (userMessage === '') return;
+
+        // 1. Adiciona a mensagem do usuário à tela
+        addMessageToChat('user', userMessage);
+        input.value = '';
+        submitBtn.disabled = true;
+
+        // 2. Adiciona um indicador de "digitando..."
+        addMessageToChat('ai', '...');
+
+        try {
+            // 3. Envia a mensagem E O ID DA SESSÃO para o n8n
+            const response = await fetch(N8N_WEBHOOK_URL, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    message: userMessage,
+                    sessionId: sessionId // <-- ID DA SESSÃO ENVIADO AQUI
+                })
+            });
+
+            if (!response.ok) {
+                // Se a resposta não for OK (ex: 404, 500), lança um erro
+                throw new Error('A resposta do servidor não foi OK.');
+            }
+
+            const data = await response.json();
+            const aiReply = data.reply || 'Desculpe, não consegui processar sua resposta. Tente novamente.';
+
+            // 4. Remove o "digitando..." e adiciona a resposta da IA
+            if (chatWindow.lastChild) {
+                chatWindow.removeChild(chatWindow.lastChild); // Remove o "..."
+            }
+            addMessageToChat('ai', aiReply);
+
+        } catch (error) {
+            console.error('Erro ao contatar o webhook:', error);
+            if (chatWindow.lastChild) {
+                chatWindow.removeChild(chatWindow.lastChild); // Remove o "..."
+            }
+            // Mensagem de erro amigável para o usuário
+            addMessageToChat('ai', 'Ocorreu um erro de conexão. Por favor, tente novamente mais tarde.');
+        } finally {
+            // Reabilita o botão de envio aconteça o que acontecer
+            submitBtn.disabled = false;
+        }
+    });
+
+    /**
+     * Adiciona uma nova bolha de chat na janela
+     * @param {'user' | 'ai'} sender - Quem enviou a mensagem
+     * @param {string} text - O conteúdo da mensagem
+     */
+function addMessageToChat(sender, text) {
+    const messageDiv = document.createElement('div');
+    messageDiv.className = `chat-message ${sender}-message`;
+
+    let avatarHTML = '';
+    if (sender === 'ai') {
+        avatarHTML = '<img src="./src/img/LIA_GEON.png" alt="Lia">';
+    } else {
+        avatarHTML = '<i class="fas fa-user"></i>';
+    }
+
+    // --- MUDANÇA 7: LÓGICA DA ANIMAÇÃO DE "DIGITANDO" ---
+    
+    let contentHTML = '';
+    
+    // Se for a IA e o texto for '...', substitui pelo animado
+    if (sender === 'ai' && text === '...') {
+        contentHTML = `
+            <div class="message-content">
+                <div class="typing-indicator">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </div>
+            </div>
+        `;
+        // Adiciona um ID para facilitar a remoção
+        messageDiv.id = "typing-indicator-message"; 
+    } else {
+        // Caso contrário, usa o parágrafo normal
+        contentHTML = `
+            <div class="message-content">
+                <p>${text}</p>
+            </div>
+        `;
+    }
+
+    messageDiv.innerHTML = `
+        <div class="message-avatar">
+            ${avatarHTML} 
+        </div>
+        ${contentHTML}
+    `;
+    // --- FIM DA MODIFICAÇÃO ---
+    
+    chatWindow.appendChild(messageDiv);
+    chatWindow.scrollTop = chatWindow.scrollHeight; 
+}
+}
+
     // Project cards hover effects
     const projectCards = document.querySelectorAll('.project-card');
     projectCards.forEach(card => {
@@ -258,7 +499,7 @@ function initializeAnimations() {
         });
     });
 
-}
+
 
 // Parallax effect for hero section
 function updateHeroFade() {
@@ -982,5 +1223,3 @@ document.addEventListener("DOMContentLoaded", function () {
         });
     });
 });
-
-

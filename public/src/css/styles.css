@@ -19,7 +19,7 @@
 .section-title::after {
     content: '';
     position: absolute;
-    bottom: -10px;
+    bottom: -15px;
     left: 50%;
     transform: translateX(-50%);
     width: 80px;
@@ -33,6 +33,7 @@
     font-size: 1.125rem;
     max-width: 800px;
     margin: 0 auto;
+    margin-top: 30px;
 }
 
 .highlight {
@@ -46,55 +47,41 @@
 .btn {
     display: inline-flex;
     align-items: center;
-    gap: 0.5rem;
-    padding: 1rem 2rem;
-    border: none;
-    border-radius: var(--border-radius);
+    justify-content: center;
+    gap: 0.75rem;
+    padding: 0.9rem 2rem;
     font-family: var(--font-heading);
     font-weight: 600;
     font-size: 1rem;
     text-decoration: none;
     cursor: pointer;
-    transition: var(--transition);
     position: relative;
-    overflow: hidden;
-}
-
-.btn::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: -100%;
-    width: 100%;
-    height: 100%;
-    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
-    transition: left 0.5s;
-}
-
-.btn:hover::before {
-    left: 100%;
+    /* Removida a transição para um efeito totalmente estático */
+    transition: none; 
 }
 
 .btn-primary {
-    background: var(--gradient-primary);
-    color: var(--text-light);
-    box-shadow: var(--shadow-medium);
+    background: transparent; /* Fundo transparente */
+    border-radius: var(--border-radius);
+    /* Borda sólida com a cor azul principal da sua paleta */
+    border: 2px solid var(--secondary-color); /* */
+    /* Cor do texto igual à da borda para um visual limpo */
+    color: var(--secondary-color); /* */
+
+    /* Garantindo que não haja sombras */
+    box-shadow: none;
+    text-shadow: none;
 }
 
-.btn-primary:hover {
-    transform: translateY(-2px);
-    box-shadow: var(--shadow-heavy);
-}
+/* O seletor :hover foi removido para eliminar qualquer animação ou mudança de estilo ao passar o mouse,
+   conforme solicitado. O cursor mudará para "ponteiro" por causa da regra no .btn, 
+   que é o feedback visual suficiente. */
 
 .btn-secondary {
     background: transparent;
-    color: var(--text-light);
-    border: 2px solid var(--secondary-color);
-}
-
-.btn-secondary:hover {
-    background: var(--secondary-color);
-    transform: translateY(-2px);
+    color: var(--text-gray); /* */
+    border: 2px solid var(--text-gray); /* */
+    border-radius: var(--border-radius);
 }
 
 /* ===== LOADING SCREEN ===== */
@@ -111,6 +98,10 @@
     align-items: center;
     z-index: 10000;
     transition: opacity 0.5s ease-out;
+}
+
+#loading-screen > p{
+    width: 26rem;
 }
 
 .loading-logo-img{
@@ -163,8 +154,8 @@
 
 /* ===== PARTICLES BACKGROUND ===== */
 #particles-js {
-    position: absolute;
     top: 0;
+    position: absolute;
     left: 0;
     width: 100%;
     height: 100%;
@@ -173,23 +164,30 @@
 /* ===== HEADER ===== */
 .header {
     position: fixed;
-    top: 1.5rem; /* Adiciona um espaço no topo */
+    top: 1.5rem; /* mantém o efeito “flutuante” */
     left: 50%;
-    transform: translateX(-50%); /* Centraliza o header */
-    width: auto; /* A largura será definida pelo conteúdo */
+    transform: translateX(-50%);
+    width: 80%;
     z-index: 1000;
-    transition: var(--transition);
+    background: transparent;
+    padding: 0 2rem; /* margem lateral opcional */
 }
 
 .navbar {
-    position: relative; /* Adicione esta linha */
-    padding: 0.8rem 1.5rem;
-    background: rgba(26, 35, 50, 0.75);
-    backdrop-filter: blur(8px);
-    -webkit-backdrop-filter: blur(8px);
-    border-radius: 50px;
-    border: 1px solid rgba(255, 255, 255, 0.1);
-    box-shadow: var(--shadow-medium);
+    position: relative;
+    padding: 0.5rem 1.8rem;
+
+    /* Fundo quase transparente e com leve desfoque */
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+
+    border-radius: 14px;
+    border: 1px solid rgba(255, 255, 255, 0.12);
+
+    /* Aqui entra sua shadow box */
+    box-shadow: 0 8px 22px rgba(0, 0, 0, 0.35);
+
+    transition: background 0.3s ease, box-shadow 0.3s ease;
 }
 
 .nav-container {
@@ -204,7 +202,6 @@
 .nav-logo {
     display: flex;
     margin: 0;
-    margin-right: 5rem; 
 }
 
 .logo-img {
@@ -216,7 +213,13 @@
     display: flex;
     list-style: none;
     gap: 2.8rem;
-    align-items: center;
+    align-items: center; /* <-- Desta forma */
+}
+
+.nav-menu .nav-item:last-child {
+  position: relative;
+  /* Ajuste esse valor de 'top' se 2px for muito ou pouco */
+  top: 6px; 
 }
 
 .nav-link {
@@ -245,14 +248,54 @@
 }
 
 .nav-link.cta-button {
-    background: var(--gradient-primary);
-    padding: 0.5rem 1.5rem;
-    border-radius: var(--border-radius);
+    background: #222;
+    
+    /* * AJUSTE PRINCIPAL: 
+     * Um padding vertical (altura) PEQUENO para alinhar com o texto,
+     * e um padding horizontal (largura) MAIOR para manter o estilo.
+    */
+    padding: 0.4rem 1.6rem; 
+
+    border-radius: 50px;
     border: none;
+    color: var(--text-light);
+    font-weight: 600;
+    font-size: 1rem; 
+    display: flex;
+    align-items: center;
+    gap: 8px; 
+    box-shadow: none; 
+    transition: background 0.3s ease, transform 0.3s ease, box-shadow 0.3s ease;
 }
 
+/* Botão "Falar com um consultor" - Efeito HOVER */
+.nav-link.cta-button:hover {
+    background: #333; /* Fundo um pouco mais claro no hover */
+    transform: translateY(-2px); /* Levanta o botão suavemente */
+    /* Adiciona uma sombra sutil para dar profundidade ao hover, se desejar */
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+}
+
+/* Estilo para o ícone dentro do botão */
+.nav-link.cta-button svg {
+    color: var(--secondary-color); /* Cor amarela/dourada para o ícone */
+    margin-left: 5px; /* Espaço entre o texto e o ícone */
+    transition: transform 0.3s ease; /* Transição para o ícone */
+}
+
+/* Efeito no ícone ao passar o mouse sobre o botão */
+.nav-link.cta-button:hover svg {
+    transform: translateX(3px); /* Desliza o ícone um pouco para a direita */
+}
+
+/* Correção: Garante que o botão "Contato" não tenha a linha */
 .nav-link.cta-button::after {
     display: none;
+}
+
+/* Correção: Impede que o texto do botão "Contato" mude de cor no hover, já que estamos usando var(--text-light) */
+.nav-link.cta-button:hover {
+    color: var(--text-light); /* Mantém o texto claro */
 }
 
 .hamburger {
@@ -262,13 +305,39 @@
 }
 
 .bar {
-    width: 25px;
-    height: 3px;
+    width: 20px; /* Reduzido de 25px */
+    height: 2px; /* Reduzido de 3px */
     background: var(--text-light);
-    margin: 3px 0;
+    margin: 2px 0; /* Reduzido de 3px */
     transition: var(--transition);
 }
+
 /* ===== HERO SECTION ===== */
+
+.hero-tags {
+    display: flex; /* Alinha as tags lado a lado */
+    justify-content: flex-start; /* Centraliza o conjunto de tags */
+    align-items: center;
+    gap: 0.75rem; /* Espaçamento entre as tags */
+    margin-bottom: 1.5rem; /* Espaçamento abaixo das tags, antes do título principal */
+}
+
+.hero-tag {
+    /* O gradiente dourado, como na imagem */
+    background: var(--gradient-primary);
+    color: var(--text-dark); /* Cor do texto escura para contraste */
+    
+    padding: 0.4rem 1.2rem; /* Espaçamento interno */
+    border-radius: 12px; /* Deixa as bordas bem arredondadas (formato de pílula) */
+    
+    font-family: var(--font-heading);
+    font-size: 0.8rem; /* Tamanho da fonte pequeno e legível */
+    font-weight: 700; /* Negrito */
+    text-transform: uppercase; /* Tudo em maiúsculas */
+    letter-spacing: 0.5px; /* Leve espaçamento entre as letras */
+    white-space: nowrap; /* Evita que o texto quebre a linha */
+}
+
 .hero {
     min-height: 100vh;
     display: flex;
@@ -282,9 +351,10 @@
 }
 
 .hero-content {
-    max-width: 800px;
+    max-width: 1000px;
     z-index: 2;
     animation: heroFadeIn 1s ease-out;
+    text-align: center;
 }
 
 .hero-logo {
@@ -294,11 +364,55 @@
 .spiral-logo {
     width: 120px;
     height: auto;
-    /* animation: spiralFloat 6s ease-in-out infinite; */ /* Comentado para remover a animação */
-    /* filter: drop-shadow(0 0 20px rgba(0, 123, 255, 0.5)); */ /* Comentado para remover a luz de fundo */
+}
+
+
+/* 2. Estilo para a linha de Meta Tags */
+.hero-meta {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 0.75rem;
+    margin-top: -0.5rem; /* Ajusta o espaço com o título acima */
+    margin-bottom: 1.5rem;
+    color: var(--text-gray);
+    font-size: 1.2rem;
+    flex-wrap: wrap; /* Garante que quebre a linha em telas pequenas */
+}
+
+.hero-meta .meta-highlight {
+    background-color: var(--secondary-color);
+    color: var(--text-dark);
+    padding: 2px 8px;
+    border-radius: 4px;
+    font-weight: 600;
+}
+
+.hero-meta .meta-separator {
+    color: rgba(255, 255, 255, 0.4); /* Deixa os separadores mais sutis */
+}
+
+
+/* 3. Estilo para o Link de CTA secundário */
+.hero-secondary-cta {
+    display: inline-block;
+    margin-top: 1.5rem;
+    color: var(--text-gray);
+    text-decoration: none;
+    transition: var(--transition);
+}
+
+.hero-secondary-cta:hover {
+    color: var(--text-light);
+    text-decoration: underline;
+}
+
+.hero-subtitle {
+    margin-bottom: 2rem; /* Reduz um pouco a margem para o CTA não ficar tão longe */
 }
 
 .hero-title {
+    font-weight: 500;
     margin-bottom: 1.5rem;
     opacity: 0;
     animation: titleSlideUp 1s ease-out 0.5s forwards;
@@ -309,12 +423,10 @@
 }
 
 .hero-subtitle {
-    padding: 0 1.2rem;
-    font-size: 1.25rem;
-    color: var(--text-gray);
-    margin-bottom: 3rem;
-    opacity: 0;
-    animation: subtitleFadeIn 1s ease-out 1s forwards;
+    max-width: 900px;
+    font-size: 1.4rem; /* Tamanho de fonte específico para o subtítulo */
+    margin-left: auto;  /* Adicione esta linha para centralizar */
+    margin-right: auto; /* Adicione esta linha para centralizar */
 }
 
 .hero-buttons {
@@ -365,6 +477,410 @@
     0%, 20%, 50%, 80%, 100% { transform: translateX(-50%) translateY(0); }
     40% { transform: translateX(-50%) translateY(-10px); }
     60% { transform: translateX(-50%) translateY(-5px); }
+}
+
+
+/* ===== AI CHAT SECTION (NOVO DESIGN) ===== */
+.ai-chat {
+    padding: 6rem 1rem;
+    background: #000000; /* Fundo preto, como na referência */
+    position: relative;
+}
+
+.ai-chat-logo {
+    display: block;
+    margin: 0 auto 2rem auto;
+    height: 35px;
+}
+
+#ai-chat .section-header {
+    margin-bottom: 2rem;
+}
+
+#ai-chat .section-title {
+    /* Título maior, como na referência */
+    font-size: clamp(2.5rem, 5vw, 4rem); 
+    font-weight: 700;
+}
+/* Remove a linha azul debaixo do título apenas nesta seção */
+#ai-chat .section-title::after {
+    display: none;
+}
+
+/* O container principal do chat */
+.chat-container {
+    max-width: 900px;
+    margin: 0 auto;
+    background: #0A1128; /* Cor de fundo principal do site */
+    border-radius: var(--border-radius);
+    border: 1px solid rgba(0, 123, 255, 0.2);
+    height: 70vh; /* Altura alta para parecer uma aplicação */
+    min-height: 500px;
+    display: flex;
+    flex-direction: column; /* Empilha a janela de chat e o input */
+    overflow: hidden;
+    box-shadow: var(--shadow-heavy);
+}
+
+/* 1. Janela de Mensagens */
+.chat-window {
+    flex-grow: 1; /* Ocupa todo o espaço disponível */
+    padding: 1.5rem;
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+    position: relative;
+    z-index: 1;
+}
+
+/* Logo transparente no fundo do chat */
+.chat-window::before {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%); /* Centraliza o logo */
+    
+    width: 250px;  /* Tamanho do logo no fundo */
+    height: 250px; /* Tamanho do logo no fundo */
+    
+    /* Use o caminho para o seu logo (o ícone é o melhor) */
+    background-image: url('../img/GEONAI-LOGO08.png'); 
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: center;
+    
+    /* Esta é a mágica: ajuste a opacidade como desejar */
+    opacity: 0.05; /* 5% de opacidade (bem sutil) */
+    
+    z-index: -1; /* Coloca o logo atrás das mensagens */
+}
+
+/* ===== ESTILO DO CTA TEMPORÁRIO DO CHAT (ATUALIZADO) ===== */
+
+#chat-placeholder {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    /* Move o texto para cima (-120px) para ficar acima do logo */
+    transform: translate(-50%, -120px);
+    
+    color: var(--text-gray);
+    font-size: 1.5rem; /* <-- MUDANÇA: Aumentamos o tamanho da fonte */
+    font-weight: bold;
+    text-align: center;
+    max-width: 80%;
+    opacity: 0.4;
+    pointer-events: none; 
+    transition: opacity 0.3s ease;
+}
+
+#chat-placeholder.hidden {
+    opacity: 0;
+}
+
+/* ===== ESTILO DO MICROFONE (GRAVANDO) ===== */
+
+#mic-btn {
+    /* Torna o ícone clicável */
+    cursor: pointer;
+    transition: color 0.3s ease;
+    
+    /* Garante que o ícone fique posicionado corretamente */
+    position: absolute;
+    left: 1.25rem;
+    color: var(--text-gray);
+    font-size: 1.1rem;
+    z-index: 10; /* Coloca o ícone na frente do campo de input */
+}
+
+#mic-btn:hover {
+    color: var(--secondary-color); /* Efeito hover padrão */
+}
+
+/* * Classe que será adicionada via JS
+ * quando o microfone estiver ouvindo
+*/
+#mic-btn.listening {
+    color: #ff4757; /* Vermelho para "gravando" */
+    animation: pulse 1.5s infinite;
+}
+
+/* * Animação de pulsar
+*/
+@keyframes pulse {
+    0% { transform: scale(1); opacity: 1; }
+    50% { transform: scale(1.2); opacity: 0.7; }
+    100% { transform: scale(1); opacity: 1; }
+}
+
+/* * Ajusta o padding do input para não sobrepor o ícone
+ * (o seu código já tinha, mas vamos garantir)
+*/
+#chat-input {
+    padding-left: 3.5rem; 
+}
+
+.chat-message {
+    display: flex;
+    gap: 1rem;
+    max-width: 85%;
+    align-items: flex-start;
+}
+
+.message-avatar {
+    width: 40px;
+    height: 40px;
+    flex-shrink: 0;
+    border-radius: 50%;
+    overflow: hidden;
+}
+.message-avatar img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+.message-avatar i {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.2rem;
+    background: rgba(0, 123, 255, 0.2);
+    color: var(--secondary-color);
+}
+
+.message-content p {
+    margin: 0;
+    font-size: 1rem;
+    color: var(--text-gray);
+    line-height: 1.6;
+    background: rgba(255, 255, 255, 0.05);
+    padding: 0.75rem 1.25rem;
+    border-radius: var(--border-radius);
+}
+
+.typing-indicator {
+    display: flex;
+    align-items: center;
+    /* Ajusta a altura para corresponder ao padding do texto */
+    padding: 10px 0; 
+}
+
+.typing-indicator span {
+    height: 9px;
+    width: 9px;
+    /* Usa a cor de texto do seu tema */
+    background-color: var(--text-gray); 
+    border-radius: 50%;
+    display: inline-block;
+    margin: 0 3px; /* Espaçamento entre os pontos */
+    
+    /* Animação */
+    animation: bounce 1.4s infinite both;
+}
+
+/* Define atrasos para a animação */
+.typing-indicator span:nth-child(1) {
+    animation-delay: 0s;
+}
+.typing-indicator span:nth-child(2) {
+    animation-delay: 0.2s;
+}
+.typing-indicator span:nth-child(3) {
+    animation-delay: 0.4s;
+}
+
+/* Animação de "pulo" dos pontos */
+@keyframes bounce {
+    0%, 80%, 100% {
+        transform: scale(0);
+    }
+    40% {
+        transform: scale(1.0);
+    }
+}
+
+/* ===== ANIMAÇÃO DE START DO LOGO DE FUNDO ===== */
+
+/* 1. Define a animação de "giro" */
+@keyframes spin-start {
+    0% {
+        /* Começa na posição e opacidade normais */
+        transform: translate(-50%, -50%) rotate(0deg);
+        opacity: 0.05;
+    }
+    50% {
+        /* Gira 360 graus e fica um pouco mais visível */
+        transform: translate(-50%, -50%) rotate(360deg);
+        opacity: 0.2;
+    }
+    100% {
+        /* Termina o giro e volta à opacidade normal */
+        transform: translate(-50%, -50%) rotate(360deg);
+        opacity: 0.05;
+    }
+}
+
+/* 2. Aplica a animação no logo de fundo */
+/* O JS vai adicionar a classe 'first-message-sent' no chat-window */
+.chat-window.first-message-sent::before {
+    animation: spin-start 1s ease-out forwards;
+}
+
+/* Mensagem da IA (Esquerda) */
+.ai-message {
+    align-self: flex-start;
+}
+
+/* Mensagem do Usuário (Direita) */
+.user-message {
+    align-self: flex-end;
+    flex-direction: row-reverse; /* Inverte a ordem (avatar à direita) */
+}
+.user-message .message-content p {
+    background: var(--secondary-color);
+    color: var(--text-dark); /* Texto escuro para contraste */
+    font-weight: 500;
+}
+
+
+/* 2. Formulário de Input (Barra Inferior) */
+.chat-input-form {
+    display: flex;
+    align-items: center;
+    padding: 1rem;
+    border-top: 1px solid rgba(0, 123, 255, 0.2);
+    gap: 1rem;
+    background: rgba(0, 0, 0, 0.2);
+}
+
+.chat-input-wrapper {
+    flex-grow: 1;
+    position: relative;
+    display: flex;
+    align-items: center;
+    background: rgba(0, 0, 0, 0.2);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 50px;
+}
+
+.chat-input-wrapper i {
+    position: absolute;
+    left: 1.25rem;
+    color: var(--text-gray);
+    font-size: 1.1rem;
+}
+
+#chat-input {
+    width: 100%;
+    background: transparent;
+    border: none;
+    border-radius: 50px;
+    padding: 0.85rem 1rem 0.85rem 3.5rem; /* Padding para o ícone */
+    color: var(--text-light);
+    font-size: 1rem;
+    outline: none;
+    transition: var(--transition);
+}
+#chat-input:focus {
+    border-color: var(--secondary-color);
+}
+#chat-input::placeholder {
+    color: var(--text-gray);
+}
+
+
+#chat-submit-btn {
+    width: 48px;
+    height: 48px;
+    flex-shrink: 0;
+    border: none;
+    border-radius: 50%;
+    background: var(--secondary-color);
+    color: var(--text-light);
+    cursor: pointer;
+    font-size: 1.2rem;
+    transition: var(--transition);
+}
+#chat-submit-btn:hover {
+    background: var(--accent-color);
+}
+#chat-submit-btn:disabled {
+    background: var(--text-gray);
+    cursor: not-allowed;
+}
+
+/* 3. Disclaimer/Aviso Legal */
+.ai-chat-disclaimer {
+    text-align: center;
+    color: var(--text-gray);
+    font-size: 0.8rem;
+    margin-top: 1.5rem;
+    max-width: 900px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+
+/* ===== STRUCTURAL INTELLIGENCE SECTION ===== */
+.structural-intelligence {
+    padding: 6rem 0;
+    background: var(--primary-color);
+    overflow: hidden;
+}
+
+.intelligence-content {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 4rem;
+    align-items: center;
+}
+
+.intelligence-text h3 {
+    color: var(--secondary-color);
+    margin-bottom: 1.5rem;
+    font-size: clamp(1.75rem, 3vw, 2.25rem);
+}
+
+.intelligence-text p {
+    color: var(--text-gray);
+    margin-bottom: 1.5rem;
+}
+
+.intelligence-text .btn {
+    margin-top: 1.5rem;
+}
+
+.intelligence-image img {
+    width: 100%;
+    height: auto;
+    transition: var(--transition);
+}
+
+.intelligence-image img:hover {
+    transform: scale(1.03);
+}
+
+
+
+/* Responsividade para a nova seção */
+@media (max-width: 1097px) {
+    .intelligence-content {
+        grid-template-columns: 1fr;
+        gap: 3rem;
+    }
+
+    .intelligence-image {
+        /* Inverte a ordem no mobile para a imagem aparecer primeiro */
+        order: -1;
+    }
+
+    .intelligence-text {
+        text-align: center;
+    }
 }
 
 /* ===== ABOUT SECTION ===== */
@@ -443,7 +959,7 @@
 
 .team-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
     gap: 2rem;
 }
 
@@ -520,7 +1036,7 @@
 /* ===== SERVICES SECTION ===== */
 .services {
     padding: 6rem 0;
-    background: linear-gradient(135deg, #0A1128 0%, #1a2332 50%, #0A1128 100%);
+    background: var(--primary-color);
 }
 
 .services-grid {
@@ -1149,7 +1665,7 @@
 
 /* ===== FOOTER ===== */
 .footer {
-    background: linear-gradient(135deg, #0A1128 0%, #000000 100%);
+    background: var(--primary-color);
     padding: 3rem 0 1rem;
     border-top: 1px solid rgba(0, 123, 255, 0.2);
 }
@@ -1258,31 +1774,6 @@
 }
 
 /* ===== FLOATING ELEMENTS ===== */
-.whatsapp-float {
-    position: fixed;
-    bottom: 2rem;
-    right: 2rem;
-    width: 60px;
-    height: 60px;
-    background: #25d366;
-    border-radius: 50%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    color: white;
-    font-size: 1.5rem;
-    text-decoration: none;
-    box-shadow: var(--shadow-heavy);
-    z-index: 1000;
-    transition: var(--transition);
-    animation: whatsappPulse 2s infinite;
-}
-
-.whatsapp-float:hover {
-    transform: scale(1.1);
-    background: #128c7e;
-}
-
 .back-to-top {
     position: fixed;
     bottom: 2rem;
@@ -1310,27 +1801,24 @@
     transform: translateY(-2px);
 }
 
-@keyframes whatsappPulse {
-    0% { box-shadow: 0 0 0 0 rgba(37, 211, 102, 0.7); }
-    70% { box-shadow: 0 0 0 10px rgba(37, 211, 102, 0); }
-    100% { box-shadow: 0 0 0 0 rgba(37, 211, 102, 0); }
-}
-
 /* ===== RESPONSIVE DESIGN ===== */
-@media (max-width: 926px){
+@media (max-width: 1070px){
+
+    .navbar{
+        padding: none;
+        width: 80%;
+        margin: 0 auto;
+    }
 
     .nav-menu {
         /* Posiciona o menu como um dropdown, abaixo do header */
         position: absolute;
-        top: calc(100% + 15px); /* 100% da altura do pai (.navbar) + 15px de espaço */
+        top: calc(100% + 15px);
         left: 50%;
         transform: translateX(-50%) translateY(-10px);
         
         /* Estilos do container do menu */
-        width: 90vw; /* Ocupa 90% da largura da tela */
-        max-width: 320px; /* Largura máxima */
         flex-direction: column;
-        background: rgba(26, 35, 50, 0.9);
         backdrop-filter: blur(10px);
         -webkit-backdrop-filter: blur(10px);
         padding: 1rem;
@@ -1373,12 +1861,32 @@
     .hamburger.active .bar:nth-child(2) {
         opacity: 0;
     }
+/* Substitua por estas (o valor mudou para 6px) */
     .hamburger.active .bar:nth-child(1) {
-        transform: translateY(8px) rotate(45deg);
+        transform: translateY(6px) rotate(45deg);
     }
     .hamburger.active .bar:nth-child(3) {
-        transform: translateY(-8px) rotate(-45deg);
+        transform: translateY(-6px) rotate(-45deg);
     }
+
+    .navbar {
+        /* Diminui o padding vertical e horizontal da barra */
+        padding: 0.5rem 1.3rem; 
+    }
+
+    .header {
+        /* Opcional: Faz o header ocupar mais espaço na tela */
+        width: 90%;
+    }
+
+    .nav-container {
+        /* Diminui o padding interno do container */
+        padding: 0 1rem;
+    }
+
+    .hero-tags {
+    justify-content: center; /* <-- Mude para 'center' */
+}
 }
 
 /* ===== AJUSTES PARA ALTURA BAIXA ===== */
@@ -1389,7 +1897,6 @@
     }
 
     .hero-title {
-        font-size: clamp(1.8rem, 4vw, 2.5rem);
         padding: 5rem 0 0 0;
     }
 
@@ -1467,14 +1974,6 @@
         text-align: center;
     }
     
-    .whatsapp-float {
-        bottom: 1rem;
-        right: 1rem;
-        width: 50px;
-        height: 50px;
-        font-size: 1.2rem;
-    }
-    
     .back-to-top {
         bottom: 1rem;
         left: 1rem;
@@ -1515,6 +2014,37 @@
     bottom: 0.7rem;
 }
 
+/* Responsividade do Novo Chat */
+@media (max-width: 600px) {
+    .ai-chat {
+        padding: 4rem 0.5rem;
+    }
+    .chat-container {
+        height: 80vh; /* Ocupa mais tela no mobile */
+        min-height: 400px;
+        border-radius: 0; /* Ocupa a largura toda */
+        border-left: none;
+        border-right: none;
+    }
+
+    .chat-window {
+        padding: 1rem;
+    }
+
+    .chat-input-wrapper i {
+        left: 1rem;
+    }
+
+    #chat-input {
+        padding-left: 3rem;
+    }
+
+    #chat-submit-btn {
+        width: 44px;
+        height: 44px;
+    }
+}
+
 
 /* ===== ACCESSIBILITY ===== */
 @media (prefers-reduced-motion: reduce) {
@@ -1528,7 +2058,6 @@
 /* ===== PRINT STYLES ===== */
 @media print {
     .header,
-    .whatsapp-float,
     .back-to-top,
     #particles-js {
         display: none;
@@ -1631,6 +2160,12 @@
     h1 { font-size: 4.5rem; }
     h2.section-title { font-size: 3.5rem; }
     h3 { font-size: 2.25rem; }
+
+    .hero-content {
+        width: 100%; /* Garante que o container use o espaço corretamente */
+        margin-left: auto;  /* Força a centralização horizontal */
+        margin-right: auto; /* Força a centralização horizontal */
+    }
 
 
     /* --------------------------------------------------------------------------
@@ -1740,4 +2275,71 @@
            sem que o layout pareça lotado. */
         grid-template-columns: repeat(3, 1fr);
     }
+}
+
+/* ===== ESTILOS PARA TROCA DE LOGO NO HEADER ===== */
+
+/* 1. Prepara o container dos logos */
+.nav-logo {
+    position: relative; /* Essencial para o posicionamento absoluto dos logos */
+    width: 140px; /* Ajuste a largura para o tamanho do seu logo completo */
+    height: 33px;  /* Ajuste a altura para o tamanho do seu logo completo */
+    transition: all 0.3s ease;
+}
+
+/* 2. Estilo base para ambos os logos */
+.logo-img {
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 100%;
+    width: auto;
+    transition: opacity 0.3s ease-in-out, transform 0.3s ease-in-out;
+}
+
+/* 3. Estilo inicial dos logos */
+.logo-full {
+    opacity: 1; /* O logo completo começa visível */
+    transform: translateY(0);
+}
+
+.logo-icon {
+    opacity: 0; /* O ícone começa invisível */
+    transform: translateY(-10px); /* Começa um pouco acima para um efeito sutil */
+    height: 110%; /* Ajuste para o ícone parecer bem centralizado e dimensionado */
+}
+
+/* 4. Estilos do Header quando a classe .scrolled for ativada */
+.header.scrolled .nav-logo {
+    width: 35px; /* Reduz a largura do container para o tamanho do ícone */
+}
+
+.header.scrolled .logo-full {
+    opacity: 0; /* Esconde o logo completo */
+    transform: translateY(10px); /* Move para baixo ao desaparecer */
+}
+
+.header.scrolled .logo-icon {
+    opacity: 1; /* Mostra o ícone */
+    transform: translateY(0);
+}
+
+/* 1. Define o estado "natural" do link (itálico, leve e mais sutil) */
+.nav-menu .nav-link:not(.cta-button) {
+  font-style: italic;
+  font-weight: 400;       /* Mantemos o peso "normal" (sem bold) */
+  color: var(--text-gray); /* Cor mais sutil para o estado "natural" */
+  
+  /* Garantimos que a transição de 'transform' seja aplicada */
+  /* (var(--transition) em .nav-link já deve cobrir isso, mas garantimos) */
+  transition: color 0.3s cubic-bezier(0.4, 0, 0.2, 1),
+              transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* 2. Define o "hover diferenciado" e fluido (sem "bold") */
+.nav-menu .nav-link:not(.cta-button):hover {
+  /* REMOVEMOS a mudança de font-weight (a causa do "salto") */
+  
+  color: var(--text-light); /* Volta ao branco total (isso será fluido) */
+  transform: translateY(-2px); /* Adiciona um leve "levantar" (isso é muito fluido) */
 }
