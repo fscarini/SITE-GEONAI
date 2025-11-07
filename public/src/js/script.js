@@ -262,7 +262,7 @@ function initializeAnimations() {
 };
 
 function initializeAiChat() {
-    const N8N_WEBHOOK_URL = '/api/chat';
+    const N8N_WEBHOOK_URL = 'https://site-geonai.vercel.app/api/chat';
 
     const form = document.getElementById('chat-form');
     const input = document.getElementById('chat-input');
