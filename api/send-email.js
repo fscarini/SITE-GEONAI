@@ -7,7 +7,7 @@ import { Redis } from '@upstash/redis';
 dotenv.config();
 sgMail.setApiKey(process.env.SENDGRID_API_KEY);
 
-const isDev = process.env.NODE_ENV
+const isDev = process.env.NODE_ENV;
 
 const redis = new Redis({
   url: process.env.UPSTASH_REDIS_REST_URL,
@@ -25,19 +25,31 @@ async function isRateLimited(ip) {
   return current > 5;
 }
 
-
+// CORREÇÃO: Adicionar todos os domínios permitidos
 const allowedOrigins = [
-  'https://geonai.com.br',        
-  'https://www.geonai.com.br',    
+  'https://geonai.com.br',
+  'https://www.geonai.com.br',
   'https://geonai.tech',
   'https://geonai.ai',
-  'https://geonai.com.br'
+  'https://site-geonai.vercel.app',
+  'http://localhost:3000'
 ];
 
-// Esta é a configuração mais segura para produção
+// CORREÇÃO: Configuração CORS mais permissiva para desenvolvimento
 const corsMiddleware = cors({
-  origin: allowedOrigins,
-  methods: ['POST', 'OPTIONS'],
+  origin: function (origin, callback) {
+    // Permitir requests sem origin (como mobile apps ou curl)
+    if (!origin) return callback(null, true);
+    
+    if (allowedOrigins.indexOf(origin) !== -1) {
+      callback(null, true);
+    } else {
+      callback(new Error('Not allowed by CORS'));
+    }
+  },
+  methods: ['GET', 'POST', 'OPTIONS'],
+  allowedHeaders: ['Content-Type', 'Authorization'],
+  credentials: true
 });
 
 // Helper para executar o middleware em um ambiente serverless
@@ -52,16 +64,32 @@ const runMiddleware = (req, res, fn) => {
   });
 };
 
+// CORREÇÃO: Headers CORS manuais como fallback
+function setCorsHeaders(res, origin) {
+  if (allowedOrigins.includes(origin)) {
+    res.setHeader('Access-Control-Allow-Origin', origin);
+  }
+  res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS');
+  res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization');
+  res.setHeader('Access-Control-Allow-Credentials', 'true');
+}
+
 export default async function handler(req, res) {
+  const origin = req.headers.origin;
+  
+  // CORREÇÃO: Configurar headers CORS manualmente
+  setCorsHeaders(res, origin);
+
+  // Handle preflight request
+  if (req.method === 'OPTIONS') {
+    return res.status(200).end();
+  }
 
   // Cabeçalhos de segurança
   res.setHeader('X-Content-Type-Options', 'nosniff');
   res.setHeader('X-Frame-Options', 'DENY');
   res.setHeader('X-XSS-Protection', '1; mode=block');
   res.setHeader('Referrer-Policy', 'no-referrer');
-
-  // Executa middleware CORS
-  await runMiddleware(req, res, corsMiddleware);
 
   if (req.method !== 'POST') {
     return res.status(405).json({ error: 'Método não permitido' });
@@ -72,10 +100,10 @@ export default async function handler(req, res) {
     return res.status(400).json({ error: 'Bot detectado.' });
   }
 
-  //  Pega IP do usuário
+  // Pega IP do usuário
   const ip = req.headers['x-forwarded-for']?.split(',')[0] || req.socket.remoteAddress;
 
-  //  Verifica rate limit
+  // Verifica rate limit
   if (await isRateLimited(ip)) {
     return res.status(429).json({ error: 'Muitas solicitações. Tente novamente mais tarde.' });
   }
@@ -96,7 +124,6 @@ export default async function handler(req, res) {
   const { name, email, company, position, message } = req.body;
   const cleanName = name.replace(/(\r|\n)/g, '');
   const cleanEmail = email.replace(/(\r|\n)/g, '');
-
 
   const msg = {
     to: process.env.EMAIL_DESTINO,

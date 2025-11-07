@@ -703,10 +703,10 @@ function initializeContactForm() {
     // Verifica se o hostname atual está na lista de produção
     const isProduction = productionHostnames.includes(window.location.hostname);
 
+    // CORREÇÃO AQUI - URLs atualizadas para apontar para a Vercel
     const API_URL = isProduction
-        ? '/api/send-email' // URL de Produção
-        : 'http://localhost:3000/send-email';             // URL de Desenvolvimento Local
-
+        ? 'https://site-geonai.vercel.app/api/send-email' // URL de Produção - Vercel
+        : 'http://localhost:3000/api/send-email';         // URL de Desenvolvimento Local
 
     async function submitForm() {
         const submitBtn = contactForm.querySelector('.submit-btn');
@@ -722,6 +722,7 @@ function initializeContactForm() {
         const message = messageEl?.value || '';
 
         try {
+            // CORREÇÃO - Agora usando a URL correta da Vercel
             const resp = await fetch(API_URL, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
