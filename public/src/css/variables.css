@@ -14,6 +14,6 @@
     --shadow-heavy: 0 15px 35px rgba(0, 0, 0, 0.2);
     --border-radius: 12px;
     --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
---font-heading: 'Rubik', sans-serif;
---font-body: 'SUSE Mono', sans-serif;
+--font-heading: 'Electrolize', sans-serif;
+--font-body: 'Roboto Flex', monospace;
 }

@@ -15,14 +15,6 @@ document.addEventListener('DOMContentLoaded', function () {
     initializeTestimonials();
     initializeBackToTop();
     initializeSmoothScrolling();
-
-    // Initialize AOS (Animate On Scroll)
-    AOS.init({
-        duration: 1000,
-        easing: 'ease-in-out',
-        once: true,
-        offset: 100
-    });
 });
 
 // ===== LOADING SCREEN =====
@@ -892,13 +884,6 @@ function checkBrowserSupport() {
 checkBrowserSupport();
 
 // ===== INITIALIZATION =====
-
-// Ensure everything is loaded before initializing
-if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', initializeIntersectionObserver);
-} else {
-    initializeIntersectionObserver();
-}
 
 // ===== EXPORT FOR TESTING =====
 if (typeof module !== 'undefined' && module.exports) {

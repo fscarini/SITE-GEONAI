@@ -15,7 +15,7 @@ html {
 }
 
 body {
-    font-family: 'Open Sans', sans-serif;
+    font-family: var(--font-body); /* MUDANÇA AQUI */
     line-height: 1.6;
     color: #ffffff;
     background-color: var(--primary-color);

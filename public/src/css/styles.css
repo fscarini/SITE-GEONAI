@@ -30,10 +30,12 @@
 
 .section-subtitle {
     color: var(--text-gray);
-    font-size: 1.125rem;
+    font-size: clamp(0.9rem, 3vw, 1.125rem); /* <-- MUDANÇA AQUI */
     max-width: 800px;
     margin: 0 auto;
     margin-top: 30px;
+    font-weight: 300; /* ADICIONADO */
+    font-style: italic; /* ADICIONADO */
 }
 
 .highlight {
@@ -41,6 +43,8 @@
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     background-clip: text;
+    font-weight: 700; /* ADICIONADO */
+    font-style: italic; /* ADICIONADO */
 }
 
 /* ===== BUTTONS ===== */
@@ -56,26 +60,38 @@
     text-decoration: none;
     cursor: pointer;
     position: relative;
-    /* Removida a transição para um efeito totalmente estático */
-    transition: none; 
+    /* ATUALIZADO: Adicionada transição para o hover */
+    transition: background 0.3s ease, transform 0.3s ease, box-shadow 0.3s ease;
 }
 
 .btn-primary {
-    background: transparent; /* Fundo transparente */
+    /* MUDANÇA: Fundo sólido com a cor principal */
+    background: var(--secondary-color);
+    
     border-radius: var(--border-radius);
-    /* Borda sólida com a cor azul principal da sua paleta */
-    border: 2px solid var(--secondary-color); /* */
-    /* Cor do texto igual à da borda para um visual limpo */
-    color: var(--secondary-color); /* */
+    
+    /* MUDANÇA: Borda da mesma cor */
+    border: 2px solid var(--secondary-color);
+    
+    /* MUDANÇA: Cor do texto clara (branco) para contraste */
+    color: var(--text-light); 
 
     /* Garantindo que não haja sombras */
     box-shadow: none;
     text-shadow: none;
 }
 
-/* O seletor :hover foi removido para eliminar qualquer animação ou mudança de estilo ao passar o mouse,
-   conforme solicitado. O cursor mudará para "ponteiro" por causa da regra no .btn, 
-   que é o feedback visual suficiente. */
+/* ADICIONADO: Efeito hover para o botão primário */
+.btn-primary:hover {
+    /* Usa a cor de destaque (azul mais claro) no hover */
+    background: var(--accent-color);
+    border-color: var(--accent-color);
+    /* Levanta o botão suavemente */
+    transform: translateY(-2px); 
+    /* Adiciona uma sombra sutil para profundidade */
+    box-shadow: 0 4px 10px rgba(0, 123, 255, 0.3);
+}
+
 
 .btn-secondary {
     background: transparent;
@@ -101,7 +117,9 @@
 }
 
 #loading-screen > p{
-    width: 26rem;
+    width: 90%; /* Garante que ocupe a largura da tela no mobile */
+    max-width: 26rem; /* Mantém o limite de 26rem para telas maiores */
+    text-align: center; /* Centraliza o texto se ele quebrar em 2 linhas */
 }
 
 .loading-logo-img{
@@ -175,7 +193,7 @@
 
 .navbar {
     position: relative;
-    padding: 0.5rem 1.8rem;
+    padding: 0.2rem 1.8rem;
 
     /* Fundo quase transparente e com leve desfoque */
     backdrop-filter: blur(12px);
@@ -249,12 +267,8 @@
 
 .nav-link.cta-button {
     background: #222;
-    
-    /* * AJUSTE PRINCIPAL: 
-     * Um padding vertical (altura) PEQUENO para alinhar com o texto,
-     * e um padding horizontal (largura) MAIOR para manter o estilo.
-    */
-    padding: 0.4rem 1.6rem; 
+
+    padding: 0.2rem 1.6rem; 
 
     border-radius: 50px;
     border: none;
@@ -322,6 +336,10 @@
     margin-bottom: 1.5rem; /* Espaçamento abaixo das tags, antes do título principal */
 }
 
+.fire-tag{
+    justify-content: center;
+}
+
 .hero-tag {
     /* O gradiente dourado, como na imagem */
     background: var(--gradient-primary);
@@ -353,7 +371,6 @@
 .hero-content {
     max-width: 1000px;
     z-index: 2;
-    animation: heroFadeIn 1s ease-out;
     text-align: center;
 }
 
@@ -407,15 +424,10 @@
     text-decoration: underline;
 }
 
-.hero-subtitle {
-    margin-bottom: 2rem; /* Reduz um pouco a margem para o CTA não ficar tão longe */
-}
-
 .hero-title {
     font-weight: 500;
     margin-bottom: 1.5rem;
-    opacity: 0;
-    animation: titleSlideUp 1s ease-out 0.5s forwards;
+    padding-top: 8rem;
 }
 
 .title-line {
@@ -424,9 +436,15 @@
 
 .hero-subtitle {
     max-width: 900px;
-    font-size: 1.4rem; /* Tamanho de fonte específico para o subtítulo */
-    margin-left: auto;  /* Adicione esta linha para centralizar */
-    margin-right: auto; /* Adicione esta linha para centralizar */
+    /* MUDANÇA 1: Fonte fluida para se adaptar ao tamanho da tela */
+    font-size: clamp(1.1rem, 4vw, 1.4rem); 
+    margin-left: auto;
+    margin-right: auto;
+    font-weight: 300; 
+    font-style: italic; 
+    /* MUDANÇA 2: Adiciona espaço nas laterais para não encostar nas bordas */
+    padding-left: 1rem;
+    padding-right: 1rem;
 }
 
 .hero-buttons {
@@ -434,9 +452,29 @@
     gap: 1rem;
     justify-content: center;
     flex-wrap: wrap;
-    opacity: 0;
-    animation: buttonsFadeIn 1s ease-out 1.5s forwards;
     margin-bottom: 4rem;
+}
+
+.hero-button-subtext {
+    color: var(--text-gray); /* Cor cinza sutil */
+    font-size: 0.9rem;       /* Tamanho um pouco menor */
+    font-weight: 400;
+    margin-top: 0.75rem;     /* Espaço abaixo do botão */
+    text-align: center;
+    font-style: normal;      /* Garante que o texto base não seja itálico */
+}
+
+/* Estiliza a parte em itálico que você pediu */
+.hero-button-subtext i {
+    font-style: italic;
+    color: var(--accent-color); /* Usa a cor de destaque (azul claro) */
+}
+
+.initial-section-button{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
 }
 
 .hero-scroll-indicator {
@@ -482,7 +520,7 @@
 
 /* ===== AI CHAT SECTION (NOVO DESIGN) ===== */
 .ai-chat {
-    padding: 6rem 1rem;
+    padding: 4rem 1rem; /* MUDANÇA AQUI */
     background: #000000; /* Fundo preto, como na referência */
     position: relative;
 }
@@ -834,7 +872,7 @@
 
 /* ===== STRUCTURAL INTELLIGENCE SECTION ===== */
 .structural-intelligence {
-    padding: 6rem 0;
+    padding: 4rem 0;
     background: var(--primary-color);
     overflow: hidden;
 }
@@ -892,7 +930,7 @@
 
 /* ===== ABOUT SECTION ===== */
 .about {
-    padding: 3rem 0 6rem 0;
+    padding: 3rem 0 4rem 0;
     background: var(--primary-color);
 }
 
@@ -916,6 +954,12 @@
 .about-vision h3 {
     color: var(--secondary-color);
     margin-bottom: 1rem;
+}
+
+.about-story p,
+.about-mission p,
+.about-vision p {
+    font-weight: 300;
 }
 
 .values-grid {
@@ -1042,7 +1086,7 @@
 
 /* ===== SERVICES SECTION ===== */
 .services {
-    padding: 6rem 0;
+    padding: 4rem 0;
     background: var(--primary-color);
 }
 
@@ -1111,6 +1155,7 @@
 .service-card p {
     color: var(--text-gray);
     margin-bottom: 1.5rem;
+    font-weight: 300; /* ADICIONADO */
 }
 
 .service-features {
@@ -1181,7 +1226,7 @@
 
 /* ===== PROJECTS SECTION ===== */
 .projects {
-    padding: 6rem 0;
+    padding: 4rem 0;
     background: var(--primary-color);
 }
 
@@ -1801,7 +1846,7 @@
     }
     
     .hero-title {
-        font-size: 2rem;
+        font-size: 4rem;
         padding: 2rem;
         margin-top: 8rem;
     }
