@@ -909,6 +909,39 @@
     transform: scale(1.03);
 }
 
+/* ===== SEÇÃO SOLUÇÃO INTELIGENTE (NOVA) ===== */
+.solution-intelligence {
+    padding: 4rem 0;
+    background: var(--primary-color);
+    overflow: hidden;
+}
+
+/* Reutiliza .intelligence-content, .intelligence-text, etc.
+   A ordem invertida (imagem/texto) é controlada pela ordem no HTML.
+   Precisamos apenas estilizar a nova lista de features.
+*/
+.solution-features {
+    list-style: none;
+    padding-left: 0;
+    margin-top: 1.5rem;
+}
+
+.solution-features li {
+    color: var(--text-gray);
+    padding: 0.5rem 0;
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    font-size: 1.1rem; 
+    font-weight: 300; 
+    margin-bottom: 0; /* Remove a margem padrão de 'p' */
+}
+
+.solution-features li i {
+    color: var(--secondary-color); /* Ícone azul */
+    font-size: 1.2rem;
+}
+
 
 
 /* Responsividade para a nova seção */
