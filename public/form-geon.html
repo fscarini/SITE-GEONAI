@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fale com um Especialista | Geon AI</title>
+    
+    <link rel="stylesheet" href="./src/css/reset.css">
+    <link rel="stylesheet" href="./src/css/variables.css">
+    
+    <link rel="stylesheet" href="./src/css/form-geon-styles.css">
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Electrolize&family=Roboto+Flex:opsz,wght@8..144,100..1000&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+
+    <div id="progress-bar-container">
+        <div id="progress-bar"></div>
+    </div>
+
+
+    <div class="form-container">
+        
+        <div class="form-header">
+            <a href="index.html" class="form-logo">
+                <img src="./src/img/GEONAI-LOGO04.png" alt="Geon AI Logo">
+            </a>
+        </div>
+
+        <form id="geon-form">
+            
+            <div class="form-step active" data-step="1">
+                <div class="question-wrapper"> 
+                    <span class="step-counter"></span>
+                    <h2 class="question-title">Qual é o seu nome <span class="highlight-blue">completo</span>?</h2>
+                    <p class="question-subtitle">Precisamos do seu nome para iniciar o <span class="highlight-blue">contato</span>.</p>
+                    <input type="text" id="name" name="name" placeholder="Digite seu nome" required>
+                    <div class="error-message" id="error-name"></div>
+                </div>
+            </div>
+
+            <div class="form-step" data-step="2">
+                <div class="question-wrapper">
+                    <span class="step-counter"></span>
+                    <h2 class="question-title">Qual o <span class="highlight-blue">website</span> da sua empresa?</h2>
+                    <p class="question-subtitle">Saber mais sobre seu negócio nos ajuda a <span class="highlight-blue">preparar</span>.</p>
+                    <input type="text" id="website" name="website" placeholder="www.suaempresa.com (Opcional)">
+                    <div class="error-message" id="error-website"></div>
+                </div>
+            </div>
+
+            <div class="form-step" data-step="3">
+                <div class="question-wrapper">
+                    <span class="step-counter"></span>
+                    <h2 class="question-title">Qual o seu <span class="highlight-blue">telefone</span> para contato?</h2>
+                    <p class="question-subtitle">Usaremos para um contato <span class="highlight-blue">direto</span> via WhatsApp.</p>
+                    <input type="text" id="phone" name="phone" placeholder="(XX) 9XXXX-XXXX" required>
+                    <div class="error-message" id="error-phone"></div>
+                </div>
+            </div>
+
+            <div class="form-step" data-step="4">
+                <div class="question-wrapper">
+                    <span class="step-counter"></span>
+                    <h2 class="question-title">Qual o seu melhor <span class="highlight-blue">e-mail</span>?</h2>
+                    <p class="question-subtitle">Usaremos este e-mail para verificar sua <span class="highlight-blue">solicitação</span>.</p>
+                    <input type="email" id="email" name="email" placeholder="email@exemplo.com" required>
+                    <div class="error-message" id="error-email"></div>
+                </div>
+            </div>
+
+            <div class="form-step" data-step="5">
+                <div class="question-wrapper">
+                    <span class="step-counter"></span>
+                    <h2 class="question-title">Verifique seu <span class="highlight-blue">e-mail</span></h2>
+                    <p class="question-subtitle">Enviamos um código para <span id="verification-email-display" class="highlight-blue"></span>. Insira-o abaixo para continuar.</p>
+                    <input type="text" id="code" name="code" placeholder="Digite o código" required>
+                    <div class="error-message" id="error-code"></div>
+                </div>
+            </div>
+
+            <div class="form-step" data-step="6">
+                <div class="question-wrapper">
+                    <span class="step-counter"></span>
+                    <h2 class="question-title">Quantos <span class="highlight-blue">colaboradores</span> a empresa possui?</h2>
+                    <p class="question-subtitle">Isso nos ajuda a entender o <span class="highlight-blue">porte</span> do seu desafio.</p>
+                    <input type="text" id="employees" name="employees" placeholder="Ex: 10-50" required>
+                    <div class="error-message" id="error-employees"></div>
+                </div>
+            </div>
+
+            <div class="form-step" data-step="7">
+                <div class="question-wrapper">
+                    <span class="step-counter"></span>
+                    <h2 class="question-title">Qual seu principal <span class="highlight-blue">objetivo</span>?</h2>
+                    <p class="question-subtitle">O que você espera <span class="highlight-blue">alcançar</span> com a automação?</p>
+                    <input type="text" id="goal" name="goal" placeholder="Ex: Reduzir custos, Aumentar vendas..." required>
+                    <div class="error-message" id="error-goal"></div>
+                </div>
+            </div>
+            
+            <div class="form-step" data-step="8">
+                <div class="question-wrapper">
+                    <span class="step-counter"></span>
+                    <h2 class="question-title">Descreva o seu <span class="highlight-blue">problema</span>:</h2>
+                    <p class="question-subtitle">Em poucas palavras, o que você quer <span class="highlight-blue">automatizar</span> com um Geon?</p>
+                    <textarea id="message" name="message" rows="4" placeholder="Ex: Automatizar o setor de Vendas" required></textarea>
+                    <div class="error-message" id="error-message"></div>
+                </div>
+            </div>
+
+            <div class="form-step success-step" data-step="9">
+                <h2 class="question-title success-title"><span class="highlight-blue">Obrigado</span>!</h2>
+                <p class="question-subtitle">Nossos especialistas entrarão em contato em breve.</p>
+            </div>
+
+            <div class="form-navigation">
+                <button type="button" id="prev-btn" class="btn btn-secondary" disabled>&lt; Voltar</button>
+                <div class="button-wrapper">
+                    <button type="button" id="next-btn" class="btn btn-primary">Continuar</button>
+                    <button type="submit" form="geon-form" id="submit-btn" class="btn btn-primary" style="display: none;">Enviar Solicitação</button>
+                </div>
+            </div>
+
+        </form>
+
+        <div class="floating-error" id="floating-error">
+            <i class="fas fa-exclamation-triangle"></i>
+            <span id="floating-error-text">Este campo é obrigatório.</span>
+        </div>
+
+    </div>
+    
+    <script src="./src/js/form-geon-script.js"></script>
+</body>
+</html>

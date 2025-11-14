@@ -1,0 +1,309 @@
+/*
+ * Arquivo: form-geon-styles.css
+ * Estilos OTIMIZADOS para o formulário inteligente (Typeform-like Imersivo)
+*/
+
+/* Garante altura total e fundo escuro (Cor principal) */
+body {
+    background: var(--primary-color);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    margin: 0;
+    overflow: hidden; 
+}
+
+.form-container {
+    max-width: 900px;
+    width: 95%;
+    height: 100vh;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+/* 1. Logo no Canto Superior Esquerdo - MUDANÇA: Centralizado */
+.form-header {
+    text-align: center; /* MUDANÇA: Centralizado */
+    width: 100%;
+    padding-top: 2rem; /* Espaçamento topo */
+    flex-shrink: 0;
+    /* REMOVIDO: padding-left: 1rem; */
+}
+
+.form-logo img {
+    /* Mantenha o logo visível e pequeno, como na imagem */
+    height: 25px; 
+    width: auto;
+}
+
+/* Barra de Progresso (No topo, sutil) */
+#progress-bar-container {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 3px;
+    background: rgba(255, 255, 255, 0.05);
+    z-index: 100;
+}
+
+#progress-bar {
+    height: 100%;
+    width: 0%;
+    background: var(--secondary-color);
+    transition: width 0.4s ease-in-out;
+}
+
+/* 2. Centralização da Pergunta e Input (Foco) */
+#geon-form {
+    flex-grow: 1; 
+    display: flex;
+    flex-direction: column;
+    /* CENTRALIZA VERTICALMENTE O CONTEÚDO PRINCIPAL */
+    justify-content: center; 
+    align-items: center; 
+    width: 100%;
+    padding: 2rem 0;
+}
+
+.form-step {
+    display: none;
+    animation: fadeIn 0.5s ease-out;
+    justify-content: center;
+    align-items: center;
+    text-align: left; /* Alinha o texto da pergunta à esquerda do bloco */
+    width: 100%;
+}
+
+.form-step.active {
+    display: flex; 
+}
+
+/* Redução da Proporção e Centralização do Conteúdo (Question Wrapper) */
+.question-wrapper {
+    width: 100%;
+    max-width: 500px; /* Conteúdo em proporção menor para mais espaço em branco */
+    padding: 0 1rem;
+    display: flex;
+    flex-direction: column;
+}
+
+/* NOVO: Estilo para o contador de perguntas */
+.step-counter {
+    display: block;
+    color: var(--secondary-color);
+    font-family: var(--font-heading);
+    font-size: 0.9rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    margin-bottom: 0.75rem;
+}
+
+/* Título Menor e Alinhamento */
+.question-title {
+    color: var(--text-light);
+    font-size: clamp(1.8rem, 4vw, 2.2rem); /* MUDANÇA: Título diminuído */
+    margin-bottom: 0.5rem;
+    font-weight: 700;
+    line-height: 1.2;
+    font-family: var(--font-heading);
+    text-align: left; /* Título alinhado à esquerda do bloco de conteúdo */
+}
+
+.question-subtitle {
+    color: var(--text-gray);
+    font-size: clamp(0.9rem, 2vw, 1.1rem); 
+    margin-bottom: 2rem; /* Espaçamento menor para manter o foco */
+    font-weight: 400; 
+    font-style: normal;
+    text-align: left;
+}
+
+/* Destaque Azul */
+.highlight-blue {
+    color: var(--secondary-color);
+    font-weight: 900; 
+    transition: color 0.3s ease;
+}
+
+/* Input de Resposta */
+input[type="text"], 
+input[type="email"], 
+textarea {
+    width: 100%;
+    padding: 0.5rem 0;
+    background: transparent;
+    border: none;
+    border-bottom: 2px solid rgba(255, 255, 255, 0.3); 
+    color: var(--text-light);
+    font-size: 1.5rem; 
+    outline: none;
+    transition: border-color 0.3s;
+    font-family: var(--font-body);
+    text-align: left;
+    margin-top: 1.5rem; 
+}
+
+input:focus, 
+textarea:focus {
+    border-color: var(--secondary-color);
+}
+
+/* Placeholder menor que o input para dar destaque à resposta do usuário */
+input::placeholder,
+textarea::placeholder {
+    color: rgba(255, 255, 255, 0.4);
+    font-size: 1.2rem; /* Menor que o input */
+    font-family: var(--font-body);
+    text-align: left;
+}
+
+/* 3. Navegação (Próxima ao Input) */
+.form-navigation {
+    /* MUDANÇA: Alinhado com o .question-wrapper */
+    width: 100%;
+    max-width: 500px; /* MUDANÇA: Mesmo max-width do wrapper */
+    margin: 0 auto;    /* MUDANÇA: Centraliza o container */
+    padding: 1rem 1rem; /* MUDANÇA: Mesmo padding lateral do wrapper */
+    
+    display: flex;
+    justify-content: space-between; /* MUDANÇA: "Voltar" na esquerda, "Continuar" na direita */
+    align-items: center;
+    gap: 1rem;
+    flex-shrink: 0;
+    border-top: none; /* Remove a linha do rodapé */
+}
+
+/* ===== MUDANÇA PRINCIPAL AQUI ===== */
+
+/* Estilo do botão 'Voltar' */
+.btn-secondary {
+    /* MUDANÇA: Estilo de "botão comum" (outline) */
+    background: transparent;
+    border: 2px solid var(--secondary-color); /* Borda azul */
+    color: var(--secondary-color);           /* Texto azul */
+    opacity: 0.7; /* Efeito "opaco" que você pediu */
+    
+    /* Restaura o texto original do botão */
+    font-size: 1rem; /* MUDANÇA: Remove o font-size: 0 */
+    font-family: var(--font-heading);
+    font-weight: 600;
+    
+    /* Ajustes de padding e borda */
+    padding: 1rem 2.5rem; /* Mesmo padding do btn-primary */
+    border-radius: var(--border-radius);
+    
+    /* Transição */
+    transition: var(--transition);
+    cursor: pointer;
+    text-transform: none; /* Garante que "Voltar" não fique em maiúsculas */
+}
+
+/* Efeito hover para o botão 'Voltar' */
+.btn-secondary:hover {
+    background: var(--accent-color);
+    border-color: var(--accent-color);
+    color: var(--text-light);
+    opacity: 1;
+    transform: translateY(-2px);
+}
+
+/* REMOVIDO: A regra .btn-secondary::before foi completamente deletada. */
+
+
+/* Esconde o botão Voltar desabilitado */
+#prev-btn[disabled] {
+    opacity: 0; 
+    cursor: default;
+    pointer-events: none;
+}
+
+/* Estilo do botão 'Continuar' / 'Enviar' */
+.btn-primary {
+    background: var(--secondary-color); 
+    border: 2px solid var(--secondary-color);
+    color: var(--text-light);
+    border-radius: var(--border-radius);
+    padding: 1rem 2.5rem; 
+    font-weight: 600;
+    font-family: var(--font-heading);
+    transition: var(--transition);
+}
+
+.btn-primary:hover {
+    background: var(--accent-color);
+    border-color: var(--accent-color);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 10px rgba(0, 123, 255, 0.5);
+}
+
+/* Alinhamento do Botão no wrapper */
+.button-wrapper {
+    /* Mantido apenas para agrupar o Continuar/Enviar */
+    display: flex;
+    justify-content: flex-end; 
+}
+
+
+/* ===== FEEDBACK DE ERRO FLUTUANTE ===== */
+
+.floating-error {
+    position: fixed;
+    bottom: 1rem; /* Mais baixo */
+    right: 1rem;
+    background: #FF4757; 
+    color: var(--text-light);
+    padding: 0.8rem 1.2rem; /* Menor */
+    border-radius: var(--border-radius);
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    opacity: 0; 
+    visibility: hidden;
+    transition: opacity 0.3s ease-in-out, transform 0.3s ease-in-out;
+    box-shadow: var(--shadow-heavy);
+    z-index: 200;
+}
+
+.floating-error.visible {
+    opacity: 1;
+    visibility: visible;
+    transform: translateY(-50px); /* Levanta para ser visível */
+}
+
+/* Responsividade */
+@media (max-width: 600px) {
+    .form-container {
+        padding: 0 10px;
+    }
+    .form-header {
+        padding-top: 1.5rem;
+    }
+    .question-title {
+        font-size: 1.6rem;
+    }
+    .question-subtitle {
+        margin-bottom: 1.5rem;
+    }
+    input[type="text"], 
+    input[type="email"], 
+    textarea {
+        font-size: 1.2rem;
+    }
+    .form-navigation {
+        /* Garante que o padding seja aplicado corretamente no mobile */
+        padding: 1rem 1rem;
+    }
+    .floating-error {
+        bottom: 1rem;
+        right: 50%;
+        transform: translateX(50%);
+    }
+    .floating-error.visible {
+        transform: translateY(-50px) translateX(50%);
+    }
+}
