@@ -32,6 +32,8 @@ export default async function handler(req, res) {
         // 2. Busca o código salvo no Vercel KV
         const storedCode = await kv.get(email);
 
+        const userCode = code ? code.trim() : null; // Garante que o código do usuário seja limpo.
+
         // 3. Validação do código
         if (!storedCode) {
             return res.status(400).json({ error: 'Código expirado. Tente novamente.' });
