@@ -1,5 +1,5 @@
 // Arquivo: api/validate-code.js
-import { Redis } from '@upstash/redis';
+import { Redis } from '@upstash/redis'; 
 
 // Inicialização do Redis (Usando as variáveis de ambiente que existem no seu Vercel)
 const kv = new Redis({
@@ -13,23 +13,26 @@ export default async function handler(req, res) {
     }
 
     try {
-        const { email, code } = req.body;
+const { email, code } = req.body;
 
         if (!email || !code) {
             return res.status(400).json({ error: 'Email e Código são obrigatórios' });
         }
 
+        // MUDANÇA 2: Normaliza o e-mail para buscar a chave
+        const lookupEmail = email.toLowerCase().trim(); 
+
         // 1. Busca o código salvo no KV
-        const storedCode = await kv.get(email);
-        const userCode = code.trim(); // Limpa espaços em branco
+        const storedCode = await kv.get(lookupEmail);
+        const userCode = code.trim(); // Limpa espaços em branco do código do usuário
 
         // 2. Validação de Expiração
         if (!storedCode) {
             return res.status(400).json({ error: 'Código expirado. Tente novamente.' });
         }
 
-        // 3. Validação do Código
-        if (storedCode !== userCode) {
+        // 3. Validação do Código (Adicionamos um .trim() defensivo ao storedCode)
+        if (storedCode.trim() !== userCode) {
             return res.status(400).json({ error: 'Código inválido. Tente novamente.' });
         }
 
@@ -38,7 +41,6 @@ export default async function handler(req, res) {
 
     } catch (error) {
         console.error('Erro ao validar código:', error);
-        // Retorna 500 para indicar falha de serviço (Upstash ou conexão)
         return res.status(500).json({ error: 'Falha interna ao validar o código.' });
     }
 }

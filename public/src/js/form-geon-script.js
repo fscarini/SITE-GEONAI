@@ -80,7 +80,7 @@ document.addEventListener('DOMContentLoaded', () => {
             submitBtn.style.display = 'none';
         }
         
-        // MUDANÇA: O texto do botão muda no Passo 4 (E-mail)
+        // MUDANÇA: O texto do botão muda nos passos de verificação
         if (currentStep === 4) { 
              nextBtn.textContent = 'Enviar Código';
         } else if (currentStep === 5) {
@@ -178,7 +178,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     /**
-     * NOVO: Valida o código de verificação (Chamada no Passo 5)
+     * Valida o código de verificação (Chamada no Passo 5)
      */
     async function handleVerifyCode() {
         if (!validateStep()) {
@@ -215,7 +215,15 @@ document.addEventListener('DOMContentLoaded', () => {
             // Mostra o erro exato retornado pelo backend
             showFloatingError(error.message || 'Erro de conexão ou código inválido.');
         } finally {
+            // CORREÇÃO UX: Redefine o botão (texto e estado) em caso de sucesso OU falha
             nextBtn.disabled = false;
+            if (currentStep === 5) {
+                nextBtn.textContent = 'Verificar Código';
+            } else if (currentStep === 4) {
+                 nextBtn.textContent = 'Enviar Código';
+            } else {
+                 nextBtn.textContent = 'Continuar';
+            }
         }
     }
 
@@ -234,7 +242,7 @@ document.addEventListener('DOMContentLoaded', () => {
         if (currentStep === 4) { 
             handleSendVerificationCode();
         } 
-        // NOVO: Lógica de validação do código no Passo 5
+        // Lógica de validação do código no Passo 5
         else if (currentStep === 5) {
             handleVerifyCode();
         }
@@ -270,7 +278,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
             if (!response.ok) {
                 const errorData = await response.json();
-                // O backend final agora retorna 500 para falhas de serviço (Resend)
+                // O backend final agora retorna 500 para falhas de Resend
                 if (response.status === 500) { 
                      throw new Error(errorData.error || 'Erro interno ao finalizar a solicitação.');
                 }

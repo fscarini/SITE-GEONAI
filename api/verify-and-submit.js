@@ -25,14 +25,12 @@ export default async function handler(req, res) {
             website,
             phone,
             email,
-            // code não é mais usado para validação aqui
             employees,
             goal,
             message
         } = req.body;
 
-        // 2. MUDANÇA: REMOVIDA A VALIDAÇÃO DO CÓDIGO. 
-        // A validação agora é feita em /api/validate-code.js (Passo 5).
+        const lookupEmail = email.toLowerCase().trim();
 
         // 3. Se o código foi validado no Passo 5, envia o e-mail para o admin
         await resend.emails.send({
