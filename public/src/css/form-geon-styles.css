@@ -162,6 +162,42 @@ textarea::placeholder {
     text-align: left;
 }
 
+.input-with-prefix {
+    display: flex; /* Alinha o prefixo e o input lado a lado */
+    align-items: flex-end; /* Alinha na parte de baixo, como a linha do input */
+    width: 100%;
+    margin-top: 1.5rem; /* O mesmo margin-top do input original */
+    border-bottom: 2px solid rgba(255, 255, 255, 0.3); /* Linha de baixo */
+    transition: border-color 0.3s;
+}
+
+/* Estilo do prefixo fixo "https://" */
+.input-with-prefix .prefix {
+    color: rgba(255, 255, 255, 0.6); /* Cor sutil */
+    font-size: 1.5rem; /* Mesmo tamanho da fonte do input */
+    padding-bottom: 0.5rem; /* Mesmo padding-bottom do input */
+    font-family: var(--font-body);
+    font-style: italic; /* Adiciona um estilo itálico para diferenciar */
+    flex-shrink: 0; /* Impede que o texto "https://" encolha */
+    line-height: 1.2;
+}
+
+/* Input sem borda inferior, para usar a borda do wrapper */
+.input-with-prefix input[type="text"] {
+    margin-top: 0; /* Remove a margem superior já definida no wrapper */
+    border: none; /* Remove a borda inferior do input */
+    border-bottom: none; /* Garante que a borda do input não sobreponha a do wrapper */
+    padding-left: 0.25rem; /* Pequeno espaçamento entre o prefixo e o input */
+}
+
+/* Estilo de Foco (Aplica a cor azul à linha do wrapper) */
+.input-with-prefix input:focus {
+    border-color: transparent; /* Remove o foco do input, caso tenha sobrado algo */
+}
+.input-with-prefix:focus-within {
+    border-color: var(--secondary-color); /* Aplica a cor de foco na borda do container */
+}
+
 /* 3. Navegação (Próxima ao Input) */
 .form-navigation {
     /* MUDANÇA: Alinhado com o .question-wrapper */
