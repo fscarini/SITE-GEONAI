@@ -1,11 +1,13 @@
 // Arquivo: /api/send-verification.js
 import { Resend } from 'resend';
-import { Redis } from '@upstash/redis';
+import { Redis } from '@upstash/redis'; // MUDANÇA: Usando Upstash Redis
 
 const resend = new Resend(process.env.RESEND_API_KEY);
+
+// MUDANÇA: Inicializa o Redis com as variáveis de ambiente corretas
 const kv = new Redis({
-  url: process.env.UPSTASH_REDIS_REST_URL,
-  token: process.env.UPSTASH_REDIS_REST_TOKEN,
+    url: process.env.UPSTASH_REDIS_REST_URL,
+    token: process.env.UPSTASH_REDIS_REST_TOKEN,
 });
 
 export default async function handler(req, res) {
@@ -51,6 +53,7 @@ export default async function handler(req, res) {
 
     } catch (error) {
         console.error('Erro ao enviar código:', error);
+        // MUDANÇA: Retorna 500 para indicar falha de serviço (Resend ou KV)
         return res.status(500).json({ error: 'Falha ao enviar o código de verificação.' });
     }
 }

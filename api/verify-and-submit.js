@@ -1,11 +1,13 @@
 // Arquivo: /api/verify-and-submit.js
 import { Resend } from 'resend';
-import { Redis } from '@upstash/redis';
+import { Redis } from '@upstash/redis'; // MUDANÇA: Usando Upstash Redis
 
 const resend = new Resend(process.env.RESEND_API_KEY);
+
+// MUDANÇA: Inicializa o Redis com as variáveis de ambiente corretas
 const kv = new Redis({
-  url: process.env.UPSTASH_REDIS_REST_URL,
-  token: process.env.UPSTASH_REDIS_REST_TOKEN,
+    url: process.env.UPSTASH_REDIS_REST_URL,
+    token: process.env.UPSTASH_REDIS_REST_TOKEN,
 });
 
 // E-mail do admin que receberá a notificação de novo lead
@@ -23,30 +25,18 @@ export default async function handler(req, res) {
             website,
             phone,
             email,
-            code, // O código de verificação
+            // code não é mais usado para validação aqui
             employees,
             goal,
             message
         } = req.body;
 
-        // 2. Busca o código salvo no Vercel KV
-        const storedCode = await kv.get(email);
+        // 2. MUDANÇA: REMOVIDA A VALIDAÇÃO DO CÓDIGO. 
+        // A validação agora é feita em /api/validate-code.js (Passo 5).
 
-        const userCode = code ? code.trim() : null; // Garante que o código do usuário seja limpo.
-
-        // 3. Validação do código
-        if (!storedCode) {
-            return res.status(400).json({ error: 'Código expirado. Tente novamente.' });
-        }
-
-        if (storedCode !== code) {
-            // O script do frontend espera por esta mensagem específica!
-            return res.status(400).json({ error: 'Código inválido. Tente novamente.' });
-        }
-
-        // 4. Se o código estiver CORRETO, envia o e-mail para o admin
+        // 3. Se o código foi validado no Passo 5, envia o e-mail para o admin
         await resend.emails.send({
-            from: 'noreply@seusite.com', // Mesmo e-mail verificado
+            from: 'noreply@geonai.com.br', // MUDANÇA: Garante o remetente correto
             to: ADMIN_EMAIL,
             subject: `Novo Lead (Formulário Imersivo): ${name}`,
             html: `
@@ -67,14 +57,15 @@ export default async function handler(req, res) {
             `,
         });
 
-        // 5. Limpa o código do KV após o sucesso
+        // 4. Limpa o código do KV após o sucesso
         await kv.del(email);
 
-        // 6. Responde ao frontend
+        // 5. Responde ao frontend
         return res.status(200).json({ success: true });
 
     } catch (error) {
-        console.error('Erro ao verificar e enviar:', error);
-        return res.status(500).json({ error: 'Falha ao enviar sua solicitação.' });
+        console.error('❌ Erro ao verificar e enviar:', error);
+        // MUDANÇA: Retorna um erro 500 para falhas de serviço (Resend)
+        return res.status(500).json({ error: 'Falha ao enviar sua solicitação. Verifique as chaves Resend.' });
     }
 }
