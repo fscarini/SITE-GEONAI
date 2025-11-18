@@ -1,8 +1,9 @@
 // Arquivo: /api/send-verification.js
 import { Resend } from 'resend';
-import { kv } from '@vercel/kv';
+import { Redis } from '@upstash/redis';
 
 const resend = new Resend(process.env.RESEND_API_KEY);
+const kv = new Redis({ url: process.env.REDIS_URL });
 
 export default async function handler(req, res) {
     if (req.method !== 'POST') {
