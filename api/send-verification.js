@@ -3,7 +3,10 @@ import { Resend } from 'resend';
 import { Redis } from '@upstash/redis';
 
 const resend = new Resend(process.env.RESEND_API_KEY);
-const kv = new Redis({ url: process.env.REDIS_URL });
+const kv = new Redis({
+  url: process.env.UPSTASH_REDIS_REST_URL,
+  token: process.env.UPSTASH_REDIS_REST_TOKEN,
+});
 
 export default async function handler(req, res) {
     if (req.method !== 'POST') {
