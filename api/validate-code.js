@@ -13,26 +13,26 @@ export default async function handler(req, res) {
     }
 
     try {
-const { email, code } = req.body;
+        const { email, code } = req.body;
 
         if (!email || !code) {
             return res.status(400).json({ error: 'Email e Código são obrigatórios' });
         }
 
-        // MUDANÇA 2: Normaliza o e-mail para buscar a chave
+        // MUDANÇA: Normaliza o e-mail para buscar a chave
         const lookupEmail = email.toLowerCase().trim(); 
 
         // 1. Busca o código salvo no KV
         const storedCode = await kv.get(lookupEmail);
         const userCode = code.trim(); // Limpa espaços em branco do código do usuário
 
-        // 2. Validação de Expiração
-        if (!storedCode) {
+        // 2. Validação de Expiração: Verifica explicitamente se é null
+        if (storedCode === null) { 
             return res.status(400).json({ error: 'Código expirado. Tente novamente.' });
         }
 
-        // 3. Validação do Código (Adicionamos um .trim() defensivo ao storedCode)
-        if (storedCode.trim() !== userCode) {
+        // 3. Validação do Código: Adiciona verificação de tipo para evitar o TypeError
+        if (typeof storedCode !== 'string' || storedCode.trim() !== userCode) {
             return res.status(400).json({ error: 'Código inválido. Tente novamente.' });
         }
 
