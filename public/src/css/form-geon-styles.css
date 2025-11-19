@@ -114,13 +114,26 @@ body {
     text-align: left; /* Título alinhado à esquerda do bloco de conteúdo */
 }
 
-.question-subtitle {
-    color: var(--text-gray);
-    font-size: clamp(0.9rem, 2vw, 1.1rem); 
-    margin-bottom: 2rem; /* Espaçamento menor para manter o foco */
-    font-weight: 400; 
-    font-style: normal;
-    text-align: left;
+.question-title {
+    color: var(--text-light);
+    font-size: clamp(1.8rem, 4vw, 2.2rem); /* MUDANÇA: Título diminuído */
+    margin-bottom: 0.5rem;
+    font-weight: 700;
+    line-height: 1.2;
+    font-family: var(--font-heading);
+    text-align: left; /* Título alinhado à esquerda do bloco de conteúdo */
+}
+
+/* NOVO: Estilo para a tela de sucesso */
+.success-step .question-wrapper {
+    /* Centraliza o conteúdo da tela de sucesso */
+    text-align: center;
+    align-items: center; /* Garante alinhamento central */
+}
+
+.success-step .question-title {
+    /* Centraliza o texto do título */
+    text-align: center;
 }
 
 /* Destaque Azul */

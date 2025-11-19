@@ -1,4 +1,5 @@
 // Arquivo: /api/verify-and-submit.js
+
 import { Resend } from 'resend';
 import { Redis } from '@upstash/redis'; 
 

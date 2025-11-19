@@ -1,4 +1,5 @@
 // Arquivo: /api/send-verification.js
+
 import { Resend } from 'resend';
 import { Redis } from '@upstash/redis'; 
 

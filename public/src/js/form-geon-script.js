@@ -1,5 +1,45 @@
 // Arquivo: form-geon-script.js (Lógica de Verificação no Passo 4)
 
+// ===== FUNÇÃO DE MÁSCARA DE TELEFONE (NOVA) =====
+function maskPhone(value) {
+    // 1. Remove tudo que não for dígito
+    let cleaned = value.replace(/\D/g, ''); 
+
+    // 2. Limita o número a 11 dígitos (incluindo o DDD e o 9 extra)
+    cleaned = cleaned.substring(0, 11);
+
+    // 3. Aplica a máscara: (XX) XXXXX-XXXX ou (XX) XXXX-XXXX
+    let masked = '';
+
+    if (cleaned.length > 0) {
+        // (XX
+        masked += '(' + cleaned.substring(0, 2);
+    }
+    if (cleaned.length > 2) {
+        // ) X
+        masked += ') ' + cleaned.substring(2, 7);
+    } else {
+        // Garante que o parênteses seja fechado se o usuário parar no DDD
+        if (cleaned.length === 2) {
+             masked += ') ';
+        }
+    }
+    if (cleaned.length > 7) {
+        // XXXXX-XXXX
+        masked += '-' + cleaned.substring(7, 11);
+    }
+    // Lógica para números de 8 dígitos (sem o 9) - Não interfere na lógica principal de 11 dígitos.
+    else if (cleaned.length > 6 && cleaned.length < 11) {
+        // (XX) XXXX-XX
+        masked = '(' + cleaned.substring(0, 2) + ') ' + cleaned.substring(2, 6) + '-' + cleaned.substring(6, 10);
+    }
+    
+    // Retorna a string mascarada
+    return masked;
+}
+// ===== FIM DA FUNÇÃO DE MÁSCARA =====
+
+
 document.addEventListener('DOMContentLoaded', () => {
     const form = document.getElementById('geon-form');
     const steps = document.querySelectorAll('.form-step');
@@ -20,6 +60,14 @@ document.addEventListener('DOMContentLoaded', () => {
     const totalQuestionSteps = questionSteps.length; // Agora é 8
     
     let completeFormData = {};
+    
+    // NOVO: Adiciona o Event Listener para a máscara de telefone
+    const phoneInput = document.getElementById('phone');
+    if (phoneInput) {
+        phoneInput.addEventListener('input', (event) => {
+            event.target.value = maskPhone(event.target.value);
+        });
+    }
 
     function showFloatingError(message) {
         floatingErrorText.textContent = message;
@@ -41,8 +89,23 @@ document.addEventListener('DOMContentLoaded', () => {
         if (activeStepElement) {
             activeStepElement.classList.add('active');
             
+            // Verifica se é a tela de sucesso (Passo 9)
+            if (currentStep > totalQuestionSteps) {
+                // Se for a tela de sucesso, não foca.
+                const stepCounter = activeStepElement.querySelector('.step-counter');
+                if (stepCounter) stepCounter.style.display = 'none'; // Esconde o contador
+                
+                // Esconde a navegação
+                const formNavigation = document.querySelector('.form-navigation');
+                if (formNavigation) {
+                    formNavigation.style.display = 'none';
+                }
+                return; 
+            }
+
             const stepCounter = activeStepElement.querySelector('.step-counter');
             if (stepCounter) {
+                stepCounter.style.display = 'block'; // Garante que o contador apareça
                 stepCounter.textContent = `Pergunta ${currentStep} de ${totalQuestionSteps}`;
             }
             
@@ -61,11 +124,10 @@ document.addEventListener('DOMContentLoaded', () => {
         const progress = (currentStep - 1) / (totalQuestionSteps - 1) * 100;
         progressBar.style.width = `${currentStep > totalQuestionSteps ? 100 : progress}%`;
 
-        if (currentStep > totalQuestionSteps) { // Se for o Passo 9 (Sucesso)
-            prevBtn.style.display = 'none';
-            nextBtn.style.display = 'none';
-            submitBtn.style.display = 'none';
-            return;
+        // Garante que a navegação esteja visível nos passos de pergunta
+        const formNavigation = document.querySelector('.form-navigation');
+        if (formNavigation) {
+            formNavigation.style.display = 'flex';
         }
 
         prevBtn.style.display = 'inline-block';
@@ -122,9 +184,14 @@ document.addEventListener('DOMContentLoaded', () => {
             return false;
         }
         
-        if (inputField.id === 'phone' && value.length < 8) {
-            showFloatingError('Por favor, insira um telefone válido.');
-            return false;
+        // MUDANÇA: Validação do telefone usa o número limpo
+        if (inputField.id === 'phone') {
+            const cleanPhone = value.replace(/\D/g, ''); // Remove todos os caracteres não-dígitos
+            // Verifica se tem 10 (DDD + 8 dig) ou 11 (DDD + 9 dig) dígitos
+            if (cleanPhone.length < 10) { 
+                showFloatingError('Por favor, insira um telefone válido (mínimo DDD + 8 dígitos).');
+                return false;
+            }
         }
         
         // Validação básica do código (Passo 5)
@@ -319,8 +386,8 @@ document.addEventListener('DOMContentLoaded', () => {
                 // Simula o clique no botão 'Continuar' / 'Verificar Código' / 'Enviar Código'
                 nextBtn.click();
             } else if (currentStep === totalQuestionSteps) {
-                // Simula o clique no botão 'Enviar Solicitação'
-                submitBtn.click();
+                // ACIONA O ENVIO DO FORMULÁRIO QUANDO ESTAMOS NO ÚLTIMO PASSO
+                form.requestSubmit(submitBtn);
             }
         }
     });
