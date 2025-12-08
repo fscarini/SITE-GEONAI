@@ -2,17 +2,15 @@ import sgMail from '@sendgrid/mail';
 import { body, validationResult } from 'express-validator';
 import dotenv from 'dotenv';
 import cors from 'cors';
-import { Redis } from '@upstash/redis';
+import Redis from 'ioredis'; // MUDANÇA: Usando ioredis
 
 dotenv.config();
 sgMail.setApiKey(process.env.SENDGRID_API_KEY);
 
 const isDev = process.env.NODE_ENV;
 
-const redis = new Redis({
-  url: process.env.UPSTASH_REDIS_REST_URL,
-  token: process.env.UPSTASH_REDIS_REST_TOKEN,
-});
+// MUDANÇA: Conexão com Railway Redis
+const redis = new Redis(process.env.REDIS_URL_RAILWAY);
 
 async function isRateLimited(ip) {
   const key = `rate_limit:${ip}`;
@@ -25,7 +23,6 @@ async function isRateLimited(ip) {
   return current > 5;
 }
 
-// CORREÇÃO: Adicionar todos os domínios permitidos
 const allowedOrigins = [
   'https://geonai.com.br',
   'https://www.geonai.com.br',
@@ -35,12 +32,9 @@ const allowedOrigins = [
   'http://localhost:3000'
 ];
 
-// CORREÇÃO: Configuração CORS mais permissiva para desenvolvimento
 const corsMiddleware = cors({
   origin: function (origin, callback) {
-    // Permitir requests sem origin (como mobile apps ou curl)
     if (!origin) return callback(null, true);
-    
     if (allowedOrigins.indexOf(origin) !== -1) {
       callback(null, true);
     } else {
@@ -52,19 +46,6 @@ const corsMiddleware = cors({
   credentials: true
 });
 
-// Helper para executar o middleware em um ambiente serverless
-const runMiddleware = (req, res, fn) => {
-  return new Promise((resolve, reject) => {
-    fn(req, res, (result) => {
-      if (result instanceof Error) {
-        return reject(result);
-      }
-      return resolve(result);
-    });
-  });
-};
-
-// CORREÇÃO: Headers CORS manuais como fallback
 function setCorsHeaders(res, origin) {
   if (allowedOrigins.includes(origin)) {
     res.setHeader('Access-Control-Allow-Origin', origin);
@@ -76,16 +57,12 @@ function setCorsHeaders(res, origin) {
 
 export default async function handler(req, res) {
   const origin = req.headers.origin;
-  
-  // CORREÇÃO: Configurar headers CORS manualmente
   setCorsHeaders(res, origin);
 
-  // Handle preflight request
   if (req.method === 'OPTIONS') {
     return res.status(200).end();
   }
 
-  // Cabeçalhos de segurança
   res.setHeader('X-Content-Type-Options', 'nosniff');
   res.setHeader('X-Frame-Options', 'DENY');
   res.setHeader('X-XSS-Protection', '1; mode=block');
@@ -95,17 +72,20 @@ export default async function handler(req, res) {
     return res.status(405).json({ error: 'Método não permitido' });
   }
 
-  // Honeypot contra bots
   if (req.body.website) {
     return res.status(400).json({ error: 'Bot detectado.' });
   }
 
-  // Pega IP do usuário
   const ip = req.headers['x-forwarded-for']?.split(',')[0] || req.socket.remoteAddress;
 
-  // Verifica rate limit
-  if (await isRateLimited(ip)) {
-    return res.status(429).json({ error: 'Muitas solicitações. Tente novamente mais tarde.' });
+  // Bloco try-catch para proteger caso o Redis falhe
+  try {
+      if (await isRateLimited(ip)) {
+        return res.status(429).json({ error: 'Muitas solicitações. Tente novamente mais tarde.' });
+      }
+  } catch (err) {
+      console.error('Erro no Rate Limit (Redis):', err);
+      // Opcional: permitir passar se o Redis falhar, ou bloquear. Aqui deixamos passar.
   }
 
   await Promise.all([

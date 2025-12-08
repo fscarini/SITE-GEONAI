@@ -1,14 +1,12 @@
 // Arquivo: /api/send-verification.js
 
 import { Resend } from 'resend';
-import { Redis } from '@upstash/redis'; 
+import Redis from 'ioredis'; // Importação padrão do ioredis
 
 const resend = new Resend(process.env.RESEND_API_KEY);
 
-const kv = new Redis({
-    url: process.env.UPSTASH_REDIS_REST_URL,
-    token: process.env.UPSTASH_REDIS_REST_TOKEN,
-});
+// Conecta usando a URL completa da Railway (ex: redis://...)
+const kv = new Redis(process.env.REDIS_URL_RAILWAY);
 
 export default async function handler(req, res) {
     if (req.method !== 'POST') {
@@ -22,16 +20,13 @@ export default async function handler(req, res) {
             return res.status(400).json({ error: 'Email is required' });
         }
         
-        // MUDANÇA: Normaliza o e-mail para ser usado como chave
         const lookupEmail = email.toLowerCase().trim();
-
-        // 1. Gera um código de 6 dígitos
         const code = Math.floor(100000 + Math.random() * 900000).toString();
 
-        // 2. Salva o código no Vercel KV usando a chave normalizada
-        await kv.set(lookupEmail, code, { ex: 300 });
+        // MUDANÇA CRÍTICA AQUI:
+        // Sintaxe do ioredis: chave, valor, 'EX', tempo_em_segundos
+        await kv.set(lookupEmail, code, 'EX', 300);
 
-        // 3. Envia o e-mail para o usuário com o código
         await resend.emails.send({
             from: 'noreply@geonai.com.br', 
             to: email,
@@ -50,7 +45,6 @@ export default async function handler(req, res) {
             `,
         });
 
-        // 4. Responde ao frontend
         return res.status(200).json({ success: true });
 
     } catch (error) {
