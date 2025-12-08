@@ -4,7 +4,34 @@ import Redis from 'ioredis';
 
 const kv = new Redis(process.env.REDIS_URL_RAILWAY);
 
+// Lista de origens permitidas
+const allowedOrigins = [
+  'https://geonai.com.br',
+  'https://www.geonai.com.br',
+  'https://geonai.tech',
+  'https://geonai.ai',
+  'https://site-geonai.vercel.app',
+  'http://localhost:3000'
+];
+
+function setCorsHeaders(res, origin) {
+  if (allowedOrigins.includes(origin)) {
+    res.setHeader('Access-Control-Allow-Origin', origin);
+  }
+  res.setHeader('Access-Control-Allow-Methods', 'POST, OPTIONS');
+  res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
+  res.setHeader('Access-Control-Allow-Credentials', 'true');
+}
+
 export default async function handler(req, res) {
+    // 1. Aplica cabeçalhos CORS
+    setCorsHeaders(res, req.headers.origin);
+
+    // 2. Responde ao Preflight (OPTIONS)
+    if (req.method === 'OPTIONS') {
+        return res.status(200).end();
+    }
+
     if (req.method !== 'POST') {
         return res.status(405).json({ error: 'Method Not Allowed' });
     }
@@ -21,7 +48,6 @@ export default async function handler(req, res) {
 
         const lookupEmail = email.toLowerCase().trim(); 
 
-        // ioredis retorna null se não encontrar, o que é compatível com sua lógica
         storedCodeRaw = await kv.get(lookupEmail);
         userCode = code.trim();
 

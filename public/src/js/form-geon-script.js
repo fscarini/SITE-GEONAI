@@ -51,9 +51,9 @@ document.addEventListener('DOMContentLoaded', () => {
     const floatingErrorText = document.getElementById('floating-error-text');
     
     // CORREÇÃO: Remoção da extensão .js e adição do novo endpoint de validação
-    const API_SEND_CODE_ENDPOINT = '/api/send-verification'; 
-    const API_VERIFY_ENDPOINT = '/api/verify-and-submit'; 
-    const API_VALIDATE_CODE_ENDPOINT = '/api/validate-code';
+    const API_SEND_CODE_ENDPOINT = 'https://site-geonai.vercel.app/api/send-verification'; 
+    const API_VERIFY_ENDPOINT = 'https://site-geonai.vercel.app/api/verify-and-submit'; 
+    const API_VALIDATE_CODE_ENDPOINT = 'https://site-geonai.vercel.app/api/validate-code';
     
     let currentStep = 1;
     const questionSteps = Array.from(steps).filter(step => !step.classList.contains('success-step'));
@@ -206,43 +206,61 @@ document.addEventListener('DOMContentLoaded', () => {
     /**
      * Envia o código de verificação (Chamada no Passo 4)
      */
-    async function handleSendVerificationCode() {
-        if (!validateStep()) {
-            return;
-        }
-
-        nextBtn.disabled = true;
-        nextBtn.textContent = 'Enviando...';
-
-        // Pega *apenas* o e-mail para enviar
-        const email = document.getElementById('email').value;
-        
-        try {
-            const response = await fetch(API_SEND_CODE_ENDPOINT, {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ email: email }) 
-            });
-
-            if (!response.ok) {
-                // Se a API retornar 500, o erro é no Resend ou KV
-                const errorData = await response.json(); 
-                throw new Error(errorData.error || 'Falha ao enviar o código de verificação.');
-            }
-
-            // Sucesso: Atualiza o texto do Passo 5 e avança
-            document.getElementById('verification-email-display').textContent = email;
-            currentStep++; // Avança para o Passo 5 (Verificação)
-            updateStep();
-
-        } catch (error) {
-            console.error('Erro ao enviar código:', error);
-            showFloatingError(error.message || 'Não foi possível enviar o código. Verifique o e-mail e tente novamente.');
-        } finally {
-            nextBtn.disabled = false;
-            // O texto será redefinido pelo updateStep()
-        }
+async function handleSendVerificationCode() {
+    if (!validateStep()) {
+        return;
     }
+
+    nextBtn.disabled = true;
+    nextBtn.textContent = 'Enviando...';
+
+    // Pega *apenas* o e-mail para enviar
+    const email = document.getElementById('email').value;
+    
+    try {
+        const response = await fetch(API_SEND_CODE_ENDPOINT, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ email: email }) 
+        });
+
+        if (!response.ok) {
+            let errorMessage = 'Falha ao enviar o código de verificação (Erro desconhecido).';
+
+            // NOVO: Bloco try...catch para tratar o SyntaxError ao tentar ler HTML como JSON
+            try {
+                // Tenta ler o corpo da resposta como JSON (esperado do backend em caso de erro)
+                const errorData = await response.json(); 
+                errorMessage = errorData.error || errorMessage;
+            } catch (jsonError) {
+                // Se a leitura JSON falhar, o servidor provavelmente retornou HTML (404, 500)
+                if (response.status === 404) {
+                    errorMessage = 'O endpoint da API não foi encontrado (404). Verifique a rota na Vercel e o uso de URL absoluta.';
+                } else if (response.status >= 500) {
+                    errorMessage = 'Erro interno do servidor (5xx). Verifique os logs de execução na Vercel.';
+                } else {
+                    errorMessage = 'O servidor retornou uma resposta inválida ou não-JSON.';
+                }
+            }
+            
+            // Lança o erro capturado ou o erro padrão
+            throw new Error(errorMessage);
+        }
+
+        // Sucesso: Atualiza o texto do Passo 5 e avança
+        document.getElementById('verification-email-display').textContent = email;
+        currentStep++; // Avança para o Passo 5 (Verificação)
+        updateStep();
+
+    } catch (error) {
+        console.error('Erro ao enviar código:', error);
+        // Exibe a mensagem de erro específica determinada no bloco de tratamento de erro
+        showFloatingError(error.message || 'Não foi possível enviar o código. Verifique o e-mail e tente novamente.');
+    } finally {
+        nextBtn.disabled = false;
+        // O texto será redefinido pelo updateStep()
+    }
+}
 
     /**
      * Valida o código de verificação (Chamada no Passo 5)

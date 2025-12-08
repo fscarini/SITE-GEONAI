@@ -1,15 +1,48 @@
 // Arquivo: /api/send-verification.js
 
 import { Resend } from 'resend';
-import Redis from 'ioredis'; // Importação padrão do ioredis
+import Redis from 'ioredis'; 
 
 const resend = new Resend(process.env.RESEND_API_KEY);
-
-// Conecta usando a URL completa da Railway (ex: redis://...)
 const kv = new Redis(process.env.REDIS_URL_RAILWAY);
 
+// 📌 Mantenha esta lista atualizada com todos os seus domínios
+const allowedOrigins = [
+  'https://geonai.com.br',
+  'https://www.geonai.com.br',
+  'https://geonai.tech',
+  'https://geonai.ai', // ✅ Adicionado/Garantido
+  'https://site-geonai.vercel.app',
+  'http://localhost:3000'
+];
+
+/**
+ * Define os cabeçalhos CORS na resposta.
+ */
+function setCorsHeaders(res, origin) {
+  if (allowedOrigins.includes(origin)) {
+    // Permite que a origem da requisição acesse o recurso
+    res.setHeader('Access-Control-Allow-Origin', origin);
+  }
+  // Métodos e cabeçalhos permitidos para requisições
+  res.setHeader('Access-Control-Allow-Methods', 'POST, OPTIONS');
+  res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
+  res.setHeader('Access-Control-Allow-Credentials', 'true');
+}
+
 export default async function handler(req, res) {
+    const origin = req.headers.origin;
+    // 1. Defina os cabeçalhos CORS na resposta, antes de qualquer outra lógica
+    setCorsHeaders(res, origin); 
+
+    // 2. Responda imediatamente a requisições OPTIONS (preflight)
+    if (req.method === 'OPTIONS') {
+        return res.status(200).end();
+    }
+    
+    // 3. Continue com a verificação do método POST
     if (req.method !== 'POST') {
+        // Embora o OPTIONS seja tratado, é bom manter este
         return res.status(405).json({ error: 'Method Not Allowed' });
     }
 
@@ -23,9 +56,7 @@ export default async function handler(req, res) {
         const lookupEmail = email.toLowerCase().trim();
         const code = Math.floor(100000 + Math.random() * 900000).toString();
 
-        // MUDANÇA CRÍTICA AQUI:
-        // Sintaxe do ioredis: chave, valor, 'EX', tempo_em_segundos
-        await kv.set(lookupEmail, code, 'EX', 300);
+        await kv.set(lookupEmail, code, 'EX', 300); // Expira em 5 minutos
 
         await resend.emails.send({
             from: 'noreply@geonai.com.br', 

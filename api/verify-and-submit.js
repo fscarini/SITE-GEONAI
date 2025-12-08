@@ -8,7 +8,34 @@ const kv = new Redis(process.env.REDIS_URL_RAILWAY);
 
 const ADMIN_EMAIL = 'contato@geonai.com.br';
 
+// Lista de origens permitidas
+const allowedOrigins = [
+  'https://geonai.com.br',
+  'https://www.geonai.com.br',
+  'https://geonai.tech',
+  'https://geonai.ai',
+  'https://site-geonai.vercel.app',
+  'http://localhost:3000'
+];
+
+function setCorsHeaders(res, origin) {
+  if (allowedOrigins.includes(origin)) {
+    res.setHeader('Access-Control-Allow-Origin', origin);
+  }
+  res.setHeader('Access-Control-Allow-Methods', 'POST, OPTIONS');
+  res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
+  res.setHeader('Access-Control-Allow-Credentials', 'true');
+}
+
 export default async function handler(req, res) {
+    // 1. Aplica cabeçalhos CORS
+    setCorsHeaders(res, req.headers.origin);
+
+    // 2. Responde ao Preflight (OPTIONS)
+    if (req.method === 'OPTIONS') {
+        return res.status(200).end();
+    }
+
     if (req.method !== 'POST') {
         return res.status(405).json({ error: 'Method Not Allowed' });
     }
@@ -48,7 +75,7 @@ export default async function handler(req, res) {
             `,
         });
 
-        // ioredis usa .del() da mesma forma
+        // Remove o código do Redis após o uso bem-sucedido
         await kv.del(lookupEmail); 
 
         return res.status(200).json({ success: true });
