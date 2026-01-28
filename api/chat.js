@@ -164,7 +164,7 @@ export default async function handler(req, res) {
 
     // 7. Chamar a API da OpenAI com streaming
     const stream = await openai.chat.completions.create({
-      model: 'gpt-5.1-mini',
+      model: 'gpt-4o-mini',
       messages: messages,
       max_tokens: 300,
       temperature: 0.7,
