@@ -7,14 +7,26 @@ const openai = new OpenAI({
 });
 
 // Inicializa cliente Redis para histórico de conversa (Railway)
-// A variável deve ser no formato: redis://default:senha@host:porta
-const redis = new Redis(process.env.redis_url_railway, {
-  maxRetriesPerRequest: 3,
-  retryDelayOnFailover: 100,
-  lazyConnect: true,
-  enableReadyCheck: false,
-  connectTimeout: 10000
-});
+const redisUrl = process.env.redis_url_railway;
+let redis = null;
+
+if (redisUrl) {
+  redis = new Redis(redisUrl, {
+    maxRetriesPerRequest: 3,
+    connectTimeout: 10000,
+    lazyConnect: true,
+    enableReadyCheck: false,
+    retryStrategy: (times) => Math.min(times * 50, 2000)
+  });
+  
+  redis.on('error', (err) => {
+    console.error('Redis connection error:', err.message);
+  });
+  
+  redis.on('connect', () => {
+    console.log('Redis connected successfully');
+  });
+}
 
 // Prompt do sistema - Personalidade da Lia
 const SYSTEM_PROMPT = `# SYSTEM PROMPT: LIA - GEON AI
@@ -131,16 +143,20 @@ export default async function handler(req, res) {
     const historyKey = `chat:${sessionId}`;
     let conversationHistory = [];
     
-    try {
-      const storedHistory = await redis.get(historyKey);
-      if (storedHistory) {
-        conversationHistory = typeof storedHistory === 'string' 
-          ? JSON.parse(storedHistory) 
-          : storedHistory;
+    if (redis) {
+      try {
+        const storedHistory = await redis.get(historyKey);
+        if (storedHistory) {
+          conversationHistory = typeof storedHistory === 'string' 
+            ? JSON.parse(storedHistory) 
+            : storedHistory;
+        }
+        console.log(`Histórico recuperado para ${sessionId}: ${conversationHistory.length} mensagens`);
+      } catch (redisError) {
+        console.warn('Erro ao recuperar histórico do Redis:', redisError.message);
       }
-    } catch (redisError) {
-      console.warn('Erro ao recuperar histórico do Redis:', redisError);
-      // Continua sem histórico se houver erro
+    } else {
+      console.warn('Redis não configurado - histórico desabilitado');
     }
 
     // 5. Montar mensagens para a API da OpenAI
@@ -187,10 +203,13 @@ export default async function handler(req, res) {
     }
 
     // 10. Salvar histórico no Redis (DEVE executar antes de res.end)
-    try {
-      await redis.set(historyKey, JSON.stringify(conversationHistory), 'EX', SESSION_TTL);
-    } catch (redisError) {
-      console.error('Erro ao salvar histórico:', redisError);
+    if (redis) {
+      try {
+        await redis.set(historyKey, JSON.stringify(conversationHistory), 'EX', SESSION_TTL);
+        console.log(`Histórico salvo para ${sessionId}: ${conversationHistory.length} mensagens`);
+      } catch (redisError) {
+        console.error('Erro ao salvar histórico:', redisError.message);
+      }
     }
 
     // 11. Sinalizar fim do stream e encerrar
