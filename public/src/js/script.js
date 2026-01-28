@@ -265,7 +265,7 @@ function initializeAnimations() {
 };
 
 function initializeAiChat() {
-    const N8N_WEBHOOK_URL = 'https://site-geonai.vercel.app/api/chat';
+    const CHAT_API_URL = 'https://site-geonai.vercel.app/api/chat';
 
     const form = document.getElementById('chat-form');
     const input = document.getElementById('chat-input');
@@ -387,12 +387,12 @@ const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecogni
 
         try {
             // 3. Envia a mensagem E O ID DA SESSÃO para o n8n
-            const response = await fetch(N8N_WEBHOOK_URL, {
+            const response = await fetch(CHAT_API_URL, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({
                     message: userMessage,
-                    sessionId: sessionId // <-- ID DA SESSÃO ENVIADO AQUI
+                    sessionId: sessionId
                 })
             });
 
