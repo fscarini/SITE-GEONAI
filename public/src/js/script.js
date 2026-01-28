@@ -386,7 +386,7 @@ const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecogni
         addMessageToChat('ai', '...');
 
         try {
-            // 3. Envia a mensagem E O ID DA SESSÃO para o n8n
+            // 3. Envia a mensagem com streaming SSE
             const response = await fetch(CHAT_API_URL, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
@@ -397,23 +397,65 @@ const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecogni
             });
 
             if (!response.ok) {
-                // Se a resposta não for OK (ex: 404, 500), lança um erro
                 throw new Error('A resposta do servidor não foi OK.');
             }
 
-            const data = await response.json();
-            const aiReply = data.reply || 'Desculpe, não consegui processar sua resposta. Tente novamente.';
-
-            // 4. Remove o "digitando..." e adiciona a resposta da IA
-            if (chatWindow.lastChild) {
-                chatWindow.removeChild(chatWindow.lastChild); // Remove o "..."
+            // 4. Remove o "digitando..." e cria bolha para streaming
+            const typingIndicator = document.getElementById('typing-indicator-message');
+            if (typingIndicator) {
+                typingIndicator.remove();
             }
-            addMessageToChat('ai', aiReply);
+
+            // Cria a bolha de resposta da IA vazia para streaming
+            const aiMessageDiv = document.createElement('div');
+            aiMessageDiv.className = 'chat-message ai-message';
+            aiMessageDiv.innerHTML = `
+                <div class="message-avatar">
+                    <img src="./src/img/LIA_GEON.png" alt="Lia">
+                </div>
+                <div class="message-content">
+                    <p id="streaming-response"></p>
+                </div>
+            `;
+            chatWindow.appendChild(aiMessageDiv);
+            const streamingP = document.getElementById('streaming-response');
+
+            // 5. Processa o stream SSE
+            const reader = response.body.getReader();
+            const decoder = new TextDecoder();
+            let fullText = '';
+
+            while (true) {
+                const { done, value } = await reader.read();
+                if (done) break;
+
+                const chunk = decoder.decode(value);
+                const lines = chunk.split('\n');
+
+                for (const line of lines) {
+                    if (line.startsWith('data: ')) {
+                        try {
+                            const data = JSON.parse(line.slice(6));
+                            if (data.content) {
+                                fullText += data.content;
+                                streamingP.textContent = fullText;
+                                chatWindow.scrollTop = chatWindow.scrollHeight;
+                            }
+                        } catch (e) {
+                            // Ignora linhas malformadas
+                        }
+                    }
+                }
+            }
+
+            // Remove o ID temporário após completar
+            streamingP.removeAttribute('id');
 
         } catch (error) {
-            console.error('Erro ao contatar o webhook:', error);
-            if (chatWindow.lastChild) {
-                chatWindow.removeChild(chatWindow.lastChild); // Remove o "..."
+            console.error('Erro ao contatar a API:', error);
+            const typingIndicator = document.getElementById('typing-indicator-message');
+            if (typingIndicator) {
+                typingIndicator.remove();
             }
             // Mensagem de erro amigável para o usuário
             addMessageToChat('ai', 'Ocorreu um erro de conexão. Por favor, tente novamente mais tarde.');

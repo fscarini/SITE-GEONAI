@@ -150,20 +150,39 @@ export default async function handler(req, res) {
       { role: 'user', content: message }
     ];
 
-    // 6. Chamar a API da OpenAI
-    const completion = await openai.chat.completions.create({
+    // 6. Configurar headers para streaming SSE
+    res.setHeader('Content-Type', 'text/event-stream');
+    res.setHeader('Cache-Control', 'no-cache');
+    res.setHeader('Connection', 'keep-alive');
+
+    // 7. Chamar a API da OpenAI com streaming
+    const stream = await openai.chat.completions.create({
       model: 'gpt-4o-mini',
       messages: messages,
-      max_tokens: 500,
-      temperature: 0.7
+      max_tokens: 300,
+      temperature: 0.7,
+      stream: true
     });
 
-    const reply = completion.choices[0].message.content;
+    let fullReply = '';
 
-    // 7. Atualizar histórico de conversa
+    // 8. Enviar chunks em tempo real
+    for await (const chunk of stream) {
+      const content = chunk.choices[0]?.delta?.content || '';
+      if (content) {
+        fullReply += content;
+        res.write(`data: ${JSON.stringify({ content })}\n\n`);
+      }
+    }
+
+    // 9. Sinalizar fim do stream
+    res.write(`data: ${JSON.stringify({ done: true })}\n\n`);
+    res.end();
+
+    // 10. Salvar histórico em background (não bloqueia resposta)
     conversationHistory.push(
       { role: 'user', content: message },
-      { role: 'assistant', content: reply }
+      { role: 'assistant', content: fullReply }
     );
 
     // Manter apenas as últimas N mensagens
@@ -171,16 +190,10 @@ export default async function handler(req, res) {
       conversationHistory = conversationHistory.slice(-MAX_HISTORY_MESSAGES * 2);
     }
 
-    // 8. Salvar histórico atualizado no Redis
-    try {
-      await redis.set(historyKey, JSON.stringify(conversationHistory), { ex: SESSION_TTL });
-    } catch (redisError) {
-      console.warn('Erro ao salvar histórico no Redis:', redisError);
-      // Continua mesmo se falhar ao salvar
-    }
-
-    // 9. Retornar resposta para o frontend
-    return res.status(200).json({ reply });
+    // Salvar histórico atualizado no Redis (async, não espera)
+    redis.set(historyKey, JSON.stringify(conversationHistory), { ex: SESSION_TTL }).catch(err => {
+      console.warn('Erro ao salvar histórico no Redis:', err);
+    });
 
   } catch (error) {
     console.error('Erro no chat:', error);
