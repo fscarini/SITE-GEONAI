@@ -3,9 +3,9 @@
  * Estilos OTIMIZADOS para o formulário inteligente (Typeform-like Imersivo)
 */
 
-/* Garante altura total e fundo escuro (Cor principal) */
+/* Garante altura total e fundo claro */
 body {
-    background: var(--primary-color);
+    background: #ffffff;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -24,19 +24,34 @@ body {
     justify-content: space-between;
 }
 
-/* 1. Logo no Canto Superior Esquerdo - MUDANÇA: Centralizado */
+/* Header com logo em evidência */
 .form-header {
-    text-align: center; /* MUDANÇA: Centralizado */
-    width: 100%;
-    padding-top: 2rem; /* Espaçamento topo */
-    flex-shrink: 0;
-    /* REMOVIDO: padding-left: 1rem; */
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    background: #262626;
+    padding: 1.5rem 2rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 100;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    min-height: 80px;
+}
+
+.form-logo {
+    display: flex;
+    padding-top: 23px;
+    align-content: center;
+    justify-content: center;
+    height: 100%;
 }
 
 .form-logo img {
-    /* Mantenha o logo visível e pequeno, como na imagem */
-    height: 25px; 
+    height: 60px; /* 150% de 40px */
     width: auto;
+    display: block;
 }
 
 /* Barra de Progresso (No topo, sutil) */
@@ -67,6 +82,7 @@ body {
     align-items: center; 
     width: 100%;
     padding: 2rem 0;
+    margin-top: 60px; /* Compensa o header fixo */
 }
 
 .form-step {
@@ -103,25 +119,25 @@ body {
     margin-bottom: 0.75rem;
 }
 
-/* Título Menor e Alinhamento */
+/* Título com cor preta */
 .question-title {
-    color: var(--text-light);
-    font-size: clamp(1.8rem, 4vw, 2.2rem); /* MUDANÇA: Título diminuído */
+    color: #000000;
+    font-size: clamp(1.8rem, 4vw, 2.2rem);
     margin-bottom: 0.5rem;
     font-weight: 700;
     line-height: 1.2;
     font-family: var(--font-heading);
-    text-align: left; /* Título alinhado à esquerda do bloco de conteúdo */
+    text-align: left;
 }
 
-.question-title {
-    color: var(--text-light);
-    font-size: clamp(1.8rem, 4vw, 2.2rem); /* MUDANÇA: Título diminuído */
-    margin-bottom: 0.5rem;
-    font-weight: 700;
-    line-height: 1.2;
-    font-family: var(--font-heading);
-    text-align: left; /* Título alinhado à esquerda do bloco de conteúdo */
+/* Subtítulo com cor preta */
+.question-subtitle {
+    color: #000000;
+    font-size: 1rem;
+    font-weight: 400;
+    line-height: 1.5;
+    margin-bottom: 1rem;
+    font-family: var(--font-body);
 }
 
 /* NOVO: Estilo para a tela de sucesso */
@@ -151,8 +167,8 @@ textarea {
     padding: 0.5rem 0;
     background: transparent;
     border: none;
-    border-bottom: 2px solid rgba(255, 255, 255, 0.3); 
-    color: var(--text-light);
+    border-bottom: 2px solid rgba(0, 0, 0, 0.3); 
+    color: #000000;
     font-size: 1.5rem; 
     outline: none;
     transition: border-color 0.3s;
@@ -169,7 +185,7 @@ textarea:focus {
 /* Placeholder menor que o input para dar destaque à resposta do usuário */
 input::placeholder,
 textarea::placeholder {
-    color: rgba(255, 255, 255, 0.4);
+    color: rgba(0, 0, 0, 0.4);
     font-size: 1.2rem; /* Menor que o input */
     font-family: var(--font-body);
     text-align: left;
@@ -180,13 +196,13 @@ textarea::placeholder {
     align-items: flex-end; /* Alinha na parte de baixo, como a linha do input */
     width: 100%;
     margin-top: 1.5rem; /* O mesmo margin-top do input original */
-    border-bottom: 2px solid rgba(255, 255, 255, 0.3); /* Linha de baixo */
+    border-bottom: 2px solid rgba(0, 0, 0, 0.3); /* Linha de baixo */
     transition: border-color 0.3s;
 }
 
 /* Estilo do prefixo fixo "https://" */
 .input-with-prefix .prefix {
-    color: rgba(255, 255, 255, 0.6); /* Cor sutil */
+    color: rgba(0, 0, 0, 0.6); /* Cor sutil */
     font-size: 1.5rem; /* Mesmo tamanho da fonte do input */
     padding-bottom: 0.5rem; /* Mesmo padding-bottom do input */
     font-family: var(--font-body);
