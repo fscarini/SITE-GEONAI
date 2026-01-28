@@ -25,7 +25,7 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link
-        href="https://fonts.googleapis.com/css2?family=Electrolize&family=Roboto+Flex:opsz,wght@8..144,100..1000&display=swap"
+        href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,100..1000;1,9..40,100..1000&family=Roboto+Flex:opsz,wght,XOPQ,XTRA,YOPQ,YTDE,YTFI,YTLC,YTUC@8..144,100..1000,96,468,79,-203,738,514,712&display=swap"
         rel="stylesheet">
 
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
@@ -84,15 +84,6 @@
 </head>
 
 <body>
-    <div id="loading-screen">
-        <img src="./src/img/GEONAI-LOGO04.png" alt="Geon AI Logo" class="loading-logo-img">
-        <div class="spiral-loader">
-            <div class="spiral-ring"></div>
-            <div class="spiral-ring"></div>
-            <div class="spiral-ring"></div>
-        </div>
-        <p>Estabelecendo uma conexão segura para você...</p>
-    </div>
 
     <header class="header">
         <nav class="navbar">
@@ -101,22 +92,20 @@
                     <img src="./src/img/GEONAI-LOGO04.png" alt="Geon AI Logo" class="logo-img logo-full">
                     <img src="./src/img/GEONAI-LOGO08.png" alt="Geon AI Icon" class="logo-img logo-icon">
                 </a>
+                
                 <ul class="nav-menu">
                     <li class="nav-item">
-                        <a href="#projects" class="nav-link">Conheça seus novos Geons</a>
+                        <a href="#services" class="nav-link">Serviços</a>
                     </li>
-<li class="nav-item">
-    <a href="form-geon.html" class="nav-link cta-button">Falar com especialista
-        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-            stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
-            class="feather feather-external-link">
-            <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path>
-            <polyline points="15 3 21 3 21 9"></polyline>
-            <line x1="10" y1="14" x2="21" y2="3"></line>
-        </svg>
-    </a>
-</li>
+                    <li class="nav-item">
+                        <a href="#ai-chat" class="nav-link">Converse com um Geon</a>
+                    </li>
                 </ul>
+
+                <div class="nav-actions">
+                    <a href="form-geon.html" class="nav-cta-button">Falar com especialista</a>
+                </div>
+
                 <div class="hamburger">
                     <span class="bar"></span>
                     <span class="bar"></span>
@@ -128,14 +117,13 @@
 
     <main>
         <section id="home" class="hero">
-            <div id="particles-js"></div>
             <div class="hero-content">
                 <div class="hero-content">
                     <h1 class="hero-title">
-                        <span class="title-line">Aumentamos seus resultados com Geons</span>
+                        <span class="title-line">Aumentamos sua receita e reduzimos seus custos</span>
                     </h1>
                     <div class="hero-meta">
-                        <span>2025</span>
+                        <span>2026</span>
                         <span class="meta-separator">•</span>
                         <span>Soluções com IA</span>
                         <span class="meta-separator">•</span>
@@ -155,11 +143,14 @@
                         <p class="hero-button-subtext">O futuro começou! Faça a <i>IA trabalhar pra você</i> agora
                             mesmo.</p>
                     </div>
-                    <div class="hero-scroll-indicator">
-                        <div class="scroll-arrow">
-                            <i class="fas fa-chevron-down"></i>
-                        </div>
-                    </div>
+                </div>
+            </div>
+            
+            <div class="hero-scroll-indicator">
+                <div class="scroll-arrow">
+                    <i class="fas fa-chevron-down"></i>
+                </div>
+            </div>
         </section>
 
         <section id="structural-intelligence" class="structural-intelligence">
@@ -271,18 +262,75 @@
             <div class="container">
                 <div class="section-header" data-aos="fade-up">
                     <h2 class="section-title">Nossos Serviços</h2>
-                    <p class="section-subtitle">Desenvolvemos soluções personalizadas de automação com inteligência
-                        artificial que se adaptam às necessidades específicas de cada cliente</p>
+                    <p class="section-subtitle">Desenvolvemos soluções personalizadas de automação com inteligência artificial que se adaptam às necessidades específicas de cada cliente</p>
                 </div>
 
+                <!-- Card especial de RH -->
+                <div class="rh-card-wrapper" data-aos="fade-up">
+                    <div class="rh-card">
+                        <div class="rh-card-header">
+                            <div class="rh-icon">
+                                <i class="fas fa-users-cog"></i>
+                            </div>
+                            <div class="rh-title-area">
+                                <h3>Geons para RH</h3>
+                                <p>Especialistas de IA virtuais que transformam a gestão de pessoas da sua empresa de acordo com a sua cultura com disponibilidade 24/7.</p>
+                            </div>
+                        </div>
+                        <div class="rh-features-grid">
+                            <div class="rh-feature">
+                                <i class="fas fa-user-tie"></i>
+                                <div>
+                                    <strong>Recrutador</strong>
+                                    <span>Triagem de currículos e classificação de candidatos</span>
+                                </div>
+                            </div>
+                            <div class="rh-feature">
+                                <i class="fas fa-video"></i>
+                                <div>
+                                    <strong>Entrevista</strong>
+                                    <span>Entrevistas iniciais por texto ou voz</span>
+                                </div>
+                            </div>
+                            <div class="rh-feature">
+                                <i class="fas fa-handshake"></i>
+                                <div>
+                                    <strong>Onboarding</strong>
+                                    <span>Integração de novos colaboradores</span>
+                                </div>
+                            </div>
+                            <div class="rh-feature">
+                                <i class="fas fa-file-invoice-dollar"></i>
+                                <div>
+                                    <strong>DP</strong>
+                                    <span>Dúvidas de férias, folha, benefícios</span>
+                                </div>
+                            </div>
+                            <div class="rh-feature">
+                                <i class="fas fa-chart-line"></i>
+                                <div>
+                                    <strong>DHO</strong>
+                                    <span>Pesquisas de clima organizacional e engajamento</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="rh-highlights">
+                            <span class="rh-highlight-tag">Mais produtividade para o RH</span>
+                            <span class="rh-highlight-tag">Disponível 24/7</span>
+                            <span class="rh-highlight-tag">Relatórios estratégicos</span>
+                            <span class="rh-highlight-tag">Indicadores em tempo real</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Grid de outros serviços -->
                 <div class="services-grid">
                     <div class="service-card" data-aos="fade-up" data-aos-delay="100">
                         <div class="service-icon">
                             <i class="fas fa-robot"></i>
                         </div>
                         <h3>Automação de Processos com IA</h3>
-                        <p>Análise e mapeamento de processos, desenvolvimento de agentes inteligentes e integração com
-                            sistemas existentes para automação completa de tarefas repetitivas.</p>
+                        <p>Análise e mapeamento de processos, desenvolvimento de agentes inteligentes e integração com sistemas existentes para automação completa de tarefas repetitivas.</p>
                         <ul class="service-features">
                             <li>Mapeamento de processos existentes</li>
                             <li>Desenvolvimento de agentes de IA</li>
@@ -296,8 +344,7 @@
                             <i class="fas fa-chart-bar"></i>
                         </div>
                         <h3>Análise Inteligente de Dados</h3>
-                        <p>Implementação de sistemas de Business Intelligence com IA, modelos preditivos e dashboards
-                            interativos para insights acionáveis.</p>
+                        <p>Implementação de sistemas de Business Intelligence com IA, modelos preditivos e dashboards interativos para insights acionáveis.</p>
                         <ul class="service-features">
                             <li>Business Intelligence com IA</li>
                             <li>Modelos preditivos</li>
@@ -311,8 +358,7 @@
                             <i class="fas fa-comments"></i>
                         </div>
                         <h3>Especialistas Virtuais (Geons)</h3>
-                        <p>Desenvolvimento de Agentes de IA com processamento de linguagem natural avançado para
-                            atendimento automatizado.</p>
+                        <p>Desenvolvimento de Agentes de IA com processamento de linguagem natural avançado para atendimento automatizado.</p>
                         <ul class="service-features">
                             <li>Especialistas para atendimento</li>
                             <li>Assistentes virtuais internos</li>
@@ -326,8 +372,7 @@
                             <i class="fas fa-bullhorn"></i>
                         </div>
                         <h3>Automação de Marketing e Vendas</h3>
-                        <p>Sistemas de lead scoring, automação de campanhas personalizadas e análise de comportamento do
-                            cliente para otimização de vendas.</p>
+                        <p>Sistemas de lead scoring, automação de campanhas personalizadas e análise de comportamento do cliente para otimização de vendas.</p>
                         <ul class="service-features">
                             <li>Lead scoring automático</li>
                             <li>Campanhas personalizadas</li>
@@ -341,8 +386,7 @@
                             <i class="fas fa-eye"></i>
                         </div>
                         <h3>Visão Computacional</h3>
-                        <p>Sistemas de reconhecimento de imagens e documentos, automação baseada em análise visual e
-                            controle de qualidade automatizado.</p>
+                        <p>Sistemas de reconhecimento de imagens e documentos, automação baseada em análise visual e controle de qualidade automatizado.</p>
                         <ul class="service-features">
                             <li>Reconhecimento de imagens</li>
                             <li>Análise de documentos</li>
@@ -356,8 +400,7 @@
                             <i class="fas fa-lightbulb"></i>
                         </div>
                         <h3>Consultoria e Estratégia em IA</h3>
-                        <p>Avaliação de maturidade digital, desenvolvimento de roadmap de transformação e treinamento de
-                            equipes em tecnologias de IA.</p>
+                        <p>Avaliação de maturidade digital, desenvolvimento de roadmap de transformação e treinamento de equipes em tecnologias de IA.</p>
                         <ul class="service-features">
                             <li>Avaliação de maturidade digital</li>
                             <li>Roadmap de transformação</li>
@@ -366,113 +409,30 @@
                         </ul>
                     </div>
                 </div>
-
-                <div class="methodology-section" data-aos="fade-up">
-                    <h3>Nossa Metodologia</h3>
-                    <div class="methodology-steps">
-                        <div class="step" data-aos="fade-right" data-aos-delay="100">
-                            <div class="step-number">1</div>
-                            <div class="step-content">
-                                <h4>Diagnóstico e Planejamento</h4>
-                                <p>Análise detalhada dos processos atuais, identificação de oportunidades e definição de
-                                    objetivos claros.</p>
-                            </div>
-                        </div>
-                        <div class="step" data-aos="fade-right" data-aos-delay="200">
-                            <div class="step-number">2</div>
-                            <div class="step-content">
-                                <h4>Desenvolvimento e Implementação</h4>
-                                <p>Desenvolvimento das soluções personalizadas, testes rigorosos e implementação gradual
-                                    monitorada.</p>
-                            </div>
-                        </div>
-                        <div class="step" data-aos="fade-right" data-aos-delay="300">
-                            <div class="step-number">3</div>
-                            <div class="step-content">
-                                <h4>Monitoramento e Otimização</h4>
-                                <p>Acompanhamento contínuo da performance, ajustes baseados em dados e suporte
-                                    especializado.</p>
-                            </div>
-                        </div>
-                    </div>
-                </div>
             </div>
         </section>
 
-        <section id="projects" class="projects">
+        <!-- CTA Section -->
+        <section id="cta" class="cta-section">
             <div class="container">
-                <div class="section-header" data-aos="fade-up">
-                    <h2 class="section-title">Projetos de sucesso</h2>
-                    <p class="section-subtitle">Conheça os Geons: A nova geração de colaboradores para sua empresa</p>
+                <div class="cta-wrapper" data-aos="fade-up">
+                    <div class="cta-logo">
+                        <img src="./src/img/GEONAI-LOGO07.png" alt="Geon AI Logo">
+                    </div>
+                    <div class="cta-content">
+                        <h2 class="cta-title">Vamos conversar sobre o futuro da sua empresa?</h2>
+                        <p class="cta-subtitle">Agende uma conversa com nossos especialistas e descubra como a IA pode impulsionar seus resultados.</p>
+                        <a href="form-geon.html" class="cta-button-main">
+                            Agendar conversa
+                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M5 12h14"></path>
+                                <path d="M12 5l7 7-7 7"></path>
+                            </svg>
+                        </a>
+                    </div>
                 </div>
-
-                <div class="projects-grid">
-                    <div class="project-card" data-aos="zoom-in" data-aos-delay="100">
-                        <div class="project-image">
-                            <div class="project-overlay">
-                                <img src="./src/img/Neah - Geon.png"
-                                    alt="Projeto Neah, um Geon especialista em SDR Inbound desenvolvido pela agência de IA Geon AI.">
-                            </div>
-                        </div>
-                        <div class="project-content">
-                            <h3>Neah</h3>
-                            <p class="project-description">Especialista SDR Inbound, realiza a recepção, atendimento e
-                                qualificação de leads via chat.</p>
-                            <div class="project-results">
-                                <div class="result-item">
-                                    <span class="result-number">24/7</span>
-                                    <span class="result-label">Atendimento Ininterrupto</span>
-                                </div>
-                                <div class="result-item">
-                                    <span class="result-number">-22%</span>
-                                    <span class="result-label">no Custo de Aquisição (CAC)</span>
-                                </div>
-                                <div class="result-item">
-                                    <span class="result-number">15s</span>
-                                    <span class="result-label">Tempo Médio de Resposta</span>
-                                </div>
-                            </div>
-                            <div class="project-tech">
-                                <span class="tech-tag">Atendimento via chat</span>
-                                <span class="tech-tag">WhatsApp</span>
-                                <span class="tech-tag">Integração com APIs</span>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="project-card" data-aos="zoom-in" data-aos-delay="200">
-                        <div class="project-image">
-                            <div class="project-overlay">
-                                <img src="./src/img/Lia - Geon.png"
-                                    alt="Projeto Lia, um Geon especialista em SDR Outbound com atendimento por voz, criado pela agência de IA Geon AI.">
-                            </div>
-                        </div>
-                        <div class="project-content">
-                            <h3>Lia</h3>
-                            <p class="project-description">Especialista SDR Inbound & Outbound. Realiza a prospecção,
-                                recepção, atendimento e qualificação de leads via chat e voz.</p>
-                            <div class="project-results">
-                                <div class="result-item">
-                                    <span class="result-number">+15 pts</span>
-                                    <span class="result-label">de Aumento no CSAT</span>
-                                </div>
-                                <div class="result-item">
-                                    <span class="result-number">-40%</span>
-                                    <span class="result-label">nos Custos Operacionais</span>
-                                </div>
-                                <div class="result-item">
-                                    <span class="result-number">Zero</span>
-                                    <span class="result-label">Tempo de Fila de Espera</span>
-                                </div>
-                            </div>
-                            <div class="project-tech">
-                                <span class="tech-tag">Atendimento via chat e voz</span>
-                                <span class="tech-tag">WhatsApp</span>
-                                <span class="tech-tag">Integração com APIs</span>
-                            </div>
-                        </div>
-                    </div>
-
+            </div>
         </section>
     </main>
 
@@ -489,8 +449,8 @@
                     <ul>
                         <li><a href="#home">Início</a></li>
                         <li><a href="#services">Serviços</a></li>
-                        <li><a href="#projects">Projetos</a></li>
-                        </ul>
+                        <li><a href="#cta">Contato</a></li>
+                    </ul>
                 </div>
 
                 <div class="footer-contact">
@@ -515,7 +475,7 @@
             </div>
 
             <div class="footer-bottom">
-                <p>&copy; 2025 Geon AI. Todos os direitos reservados.</p>
+                <p>&copy; 2026 Geon AI. Todos os direitos reservados.</p>
                 <div class="footer-legal">
                     <a class="footer-privacy">Política de Privacidade</a> |
                     <a class="footer-terms">Termos de Uso</a>
@@ -603,7 +563,7 @@
                         não, geralmente é mais seguro deixar os cookies ativados, caso interaja com um
                         dos recursos que você usa em nosso site.</span></p>
                 <p><span>Esta política é efetiva a partir de&nbsp;9
-                        Agosto de 2025 às 16:07</span></p>
+                        Agosto de 2026 às 16:07</span></p>
             </div>
         </div>
     </div>
@@ -613,7 +573,7 @@
             <span class="close-modal">&times;</span>
             <div class="terms-text">
                 <h2><span>Termos de Uso</span></h2>
-                <p><span><strong>Última atualização:</strong> 9 de Agosto de 2025</span></p>
+                <p><span><strong>Última atualização:</strong> 9 de Agosto de 2026</span></p>
 
                 <h3><span>1. Bem-vindo à Geon AI!</span></h3>
                 <p><span>Estes Termos de Uso regem o seu acesso e uso do nosso site <a

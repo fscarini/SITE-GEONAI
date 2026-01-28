@@ -1,19 +1,20 @@
 /* ===== CUSTOM PROPERTIES ===== */
 :root {
-    --primary-color: #000000;
+    --primary-color: #ffffff;
     --secondary-color: #007bff;
     --accent-color: #00d4ff;
     --text-light: #ffffff;
     --text-dark: #000000;
-    --text-gray: #cccccc;
+    --text-gray: #a0a0a0;
     --background-light: #f8f9fa;
+    --background-card: #262626;
     --gradient-primary: linear-gradient(135deg, #007bff 0%, #00d4ff 100%);
-    --gradient-dark: #000000;;
+    --gradient-dark: #000000;
     --shadow-light: 0 4px 6px rgba(0, 0, 0, 0.1);
     --shadow-medium: 0 8px 25px rgba(0, 0, 0, 0.15);
     --shadow-heavy: 0 15px 35px rgba(0, 0, 0, 0.2);
     --border-radius: 12px;
     --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
---font-heading: 'Electrolize', sans-serif;
---font-body: 'Roboto Flex', monospace;
+    --font-heading: 'DM Sans', sans-serif;
+    --font-body: 'Roboto Flex', monospace;
 }

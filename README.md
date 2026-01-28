@@ -227,7 +227,7 @@ Edite as variáveis CSS em `styles.css`:
 
 - **Desenvolvido por**: Manus AI
 - **Cliente**: Geon AI
-- **Ano**: 2025
+- **Ano**: 2026
 - **Licença**: Proprietária
 
 ## Contato para Suporte
