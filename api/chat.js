@@ -1,4 +1,3 @@
-import cors from 'cors';
 import OpenAI from 'openai';
 import { Redis } from '@upstash/redis';
 
@@ -86,31 +85,24 @@ const allowedOrigins = [
   'http://localhost:3000' // para desenvolvimento
 ];
 
-const corsMiddleware = cors({
-  origin: allowedOrigins,
-  methods: ['POST', 'OPTIONS'],
-  credentials: true
-});
-
-// Helper para executar o middleware
-const runMiddleware = (req, res, fn) => {
-  return new Promise((resolve, reject) => {
-    fn(req, res, (result) => {
-      if (result instanceof Error) {
-        return reject(result);
-      }
-      return resolve(result);
-    });
-  });
-};
-
 // Constantes para histórico
 const MAX_HISTORY_MESSAGES = 10; // Máximo de mensagens no contexto
 const SESSION_TTL = 3600; // 1 hora de expiração da sessão
 
 export default async function handler(req, res) {
-  // Executa middleware CORS
-  await runMiddleware(req, res, corsMiddleware);
+  // Configura headers CORS manualmente para garantir compatibilidade
+  const origin = req.headers.origin;
+  if (allowedOrigins.includes(origin)) {
+    res.setHeader('Access-Control-Allow-Origin', origin);
+  }
+  res.setHeader('Access-Control-Allow-Methods', 'POST, OPTIONS');
+  res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
+  res.setHeader('Access-Control-Allow-Credentials', 'true');
+
+  // Responde imediatamente às requisições preflight (OPTIONS)
+  if (req.method === 'OPTIONS') {
+    return res.status(200).end();
+  }
 
   // Cabeçalhos de segurança adicionais
   res.setHeader('X-Content-Type-Options', 'nosniff');
