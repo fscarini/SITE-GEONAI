@@ -17,6 +17,7 @@
     "cors": "^2.8.5",
     "dotenv": "^17.2.3",
     "express-validator": "^7.2.1",
+    "ioredis": "^5.4.1",
     "nodemailer": "^7.0.5",
     "openai": "^4.77.0",
     "resend": "^6.4.2"

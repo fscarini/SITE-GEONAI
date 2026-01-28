@@ -1,15 +1,19 @@
 import OpenAI from 'openai';
-import { Redis } from '@upstash/redis';
+import Redis from 'ioredis';
 
 // Inicializa cliente OpenAI
 const openai = new OpenAI({
   apiKey: process.env.OPENAI_API_KEY
 });
 
-// Inicializa cliente Redis para histórico de conversa
-const redis = new Redis({
-  url: process.env.UPSTASH_REDIS_REST_URL,
-  token: process.env.UPSTASH_REDIS_REST_TOKEN
+// Inicializa cliente Redis para histórico de conversa (Railway)
+// A variável deve ser no formato: redis://default:senha@host:porta
+const redis = new Redis(process.env.redis_url_railway, {
+  maxRetriesPerRequest: 3,
+  retryDelayOnFailover: 100,
+  lazyConnect: true,
+  enableReadyCheck: false,
+  connectTimeout: 10000
 });
 
 // Prompt do sistema - Personalidade da Lia
@@ -184,7 +188,7 @@ export default async function handler(req, res) {
 
     // 10. Salvar histórico no Redis (DEVE executar antes de res.end)
     try {
-      await redis.set(historyKey, JSON.stringify(conversationHistory), { ex: SESSION_TTL });
+      await redis.set(historyKey, JSON.stringify(conversationHistory), 'EX', SESSION_TTL);
     } catch (redisError) {
       console.error('Erro ao salvar histórico:', redisError);
     }

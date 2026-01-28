@@ -1,4 +1,4 @@
-import { Redis } from '@upstash/redis';
+import Redis from 'ioredis';
 
 export default async function handler(req, res) {
   // CORS
@@ -12,8 +12,7 @@ export default async function handler(req, res) {
   const diagnostics = {
     timestamp: new Date().toISOString(),
     environment: {
-      UPSTASH_REDIS_REST_URL: process.env.UPSTASH_REDIS_REST_URL ? '✅ Configurada' : '❌ NÃO CONFIGURADA',
-      UPSTASH_REDIS_REST_TOKEN: process.env.UPSTASH_REDIS_REST_TOKEN ? '✅ Configurada' : '❌ NÃO CONFIGURADA',
+      redis_url_railway: process.env.redis_url_railway ? '✅ Configurada' : '❌ NÃO CONFIGURADA',
       OPENAI_API_KEY: process.env.OPENAI_API_KEY ? '✅ Configurada' : '❌ NÃO CONFIGURADA',
     },
     redis: {
@@ -23,40 +22,47 @@ export default async function handler(req, res) {
     }
   };
 
-  // Testa conexão Redis apenas se as variáveis existirem
-  if (process.env.UPSTASH_REDIS_REST_URL && process.env.UPSTASH_REDIS_REST_TOKEN) {
+  // Testa conexão Redis apenas se a variável existir
+  if (process.env.redis_url_railway) {
     try {
-      const redis = new Redis({
-        url: process.env.UPSTASH_REDIS_REST_URL,
-        token: process.env.UPSTASH_REDIS_REST_TOKEN
+      const redis = new Redis(process.env.redis_url_railway, {
+        maxRetriesPerRequest: 3,
+        lazyConnect: true,
+        enableReadyCheck: false,
+        connectTimeout: 10000
       });
 
-      diagnostics.redis.connection = '✅ Cliente criado';
+      // Conecta explicitamente
+      await redis.connect();
+      diagnostics.redis.connection = '✅ Conectado';
 
       // Teste de escrita
       const testKey = 'test:ping:' + Date.now();
-      const testValue = { test: true, time: Date.now() };
+      const testValue = JSON.stringify({ test: true, time: Date.now() });
       
-      await redis.set(testKey, JSON.stringify(testValue), { ex: 60 });
+      await redis.set(testKey, testValue, 'EX', 60);
       diagnostics.redis.write = '✅ Escrita OK';
 
       // Teste de leitura
       const readValue = await redis.get(testKey);
-      diagnostics.redis.read = readValue ? '✅ Leitura OK: ' + JSON.stringify(readValue) : '❌ Leitura falhou';
+      diagnostics.redis.read = readValue ? '✅ Leitura OK' : '❌ Leitura falhou';
 
-      // Listar todas as chaves de chat
+      // Listar chaves de chat
       const allKeys = await redis.keys('chat:*');
-      diagnostics.redis.chatKeys = allKeys.length > 0 ? allKeys : 'Nenhuma sessão de chat encontrada';
+      diagnostics.redis.chatSessions = allKeys.length;
+      diagnostics.redis.chatKeys = allKeys.slice(0, 5); // Mostra até 5
 
       // Limpa o teste
       await redis.del(testKey);
+      
+      // Desconecta
+      await redis.quit();
 
     } catch (error) {
       diagnostics.redis.error = error.message;
-      diagnostics.redis.stack = error.stack;
     }
   } else {
-    diagnostics.redis.error = 'Variáveis de ambiente do Redis não configuradas no Vercel';
+    diagnostics.redis.error = 'Variável redis_url_railway não configurada no Vercel';
   }
 
   return res.status(200).json(diagnostics);
