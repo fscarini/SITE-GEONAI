@@ -20,6 +20,12 @@ document.addEventListener('DOMContentLoaded', function () {
 // ===== LOADING SCREEN =====
 function initializeLoading() {
     const loadingScreen = document.getElementById('loading-screen');
+    
+    // Verifica se o elemento existe antes de manipular
+    if (!loadingScreen) {
+        document.body.style.overflow = 'visible';
+        return;
+    }
 
     // Simulate loading time
     setTimeout(() => {
@@ -55,6 +61,9 @@ function initializeNavigation() {
     const hamburger = document.querySelector('.hamburger');
     const navMenu = document.querySelector('.nav-menu');
     const navLinks = document.querySelectorAll('.nav-link');
+
+    // Verifica se os elementos existem
+    if (!hamburger || !navMenu) return;
 
     // Mobile menu toggle
     hamburger.addEventListener('click', () => {
@@ -106,8 +115,12 @@ function initializeScrollProgress() {
 
 // ===== PARTICLES BACKGROUND =====
 function initializeParticles() {
-    if (typeof particlesJS !== 'undefined') {
-        particlesJS('particles-js', {
+    const particlesContainer = document.getElementById('particles-js');
+    
+    // Verifica se o container e a biblioteca existem
+    if (!particlesContainer || typeof particlesJS === 'undefined') return;
+    
+    particlesJS('particles-js', {
             particles: {
                 number: {
                     value: 80,
@@ -209,7 +222,6 @@ function initializeParticles() {
             },
             retina_detect: true
         });
-    }
 }
 
 // ===== ANIMATIONS =====
