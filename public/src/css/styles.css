@@ -1961,6 +1961,7 @@
     .cta-wrapper {
         padding: 3rem 2rem;
         gap: 2rem;
+        flex-direction: column;
     }
     
     .cta-logo img {
@@ -1976,7 +1977,7 @@
 
 /* ===== FOOTER ===== */
 .footer {
-    background: #262626;
+    background: rgb(38, 38, 38);
     padding: 3rem 0 1rem;
     border-top: 1px solid rgba(0, 123, 255, 0.2);
 }
@@ -2123,11 +2124,11 @@
 
     .nav-menu {
         position: fixed;
-        top: 60px;
-        left: 0;
-        right: 0;
+        top: 57px;
+        left: 60px;
+        right: 30px;
         flex-direction: column;
-        background: rgba(0, 0, 0, 0.95);
+        background: rgba(38, 38, 38, 0.95);
         backdrop-filter: blur(20px);
         -webkit-backdrop-filter: blur(20px);
         padding: 1.5rem;
