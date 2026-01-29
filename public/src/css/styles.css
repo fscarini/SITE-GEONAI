@@ -1325,9 +1325,15 @@
 
 /* Services Grid */
 .services-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
-    gap: 2rem;
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 2rem;
+}
+
+@media (max-width: 900px) {
+    .services-grid {
+        grid-template-columns: 1fr;
+    }
 }
 
 .service-card {
@@ -1339,6 +1345,10 @@
     position: relative;
     overflow: hidden;
     text-align: left;
+}
+
+.show-card{
+    border: 2.4px solid var(--secondary-color);
 }
 
 .service-card::before {
@@ -2189,7 +2199,7 @@
     }
 
     .nav-container {
-        padding: 0.8rem 1.5rem;
+        padding: 1.2rem;
     }
 
     .hero-tags {
@@ -2328,9 +2338,8 @@
         padding: 4rem 0.5rem;
     }
     .chat-container {
-        height: 80vh; /* Ocupa mais tela no mobile */
+        height: 55vh; /* Ocupa mais tela no mobile */
         min-height: 400px;
-        border-radius: 0; /* Ocupa a largura toda */
         border-left: none;
         border-right: none;
     }
@@ -2598,7 +2607,7 @@
 /* 2. Estilo base para ambos os logos */
 .logo-img {
     position: absolute;
-    top: 0;
+    top: -4px;
     left: 0;
     height: 130%;
     width: auto;
